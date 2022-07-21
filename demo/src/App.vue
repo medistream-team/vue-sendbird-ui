@@ -6,18 +6,20 @@
     </div>
     <div class="preview">
       <br><br><br>
-      (채팅 컴포넌트 배치)
+      <MessageWidget />
     </div>
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import MessageWidget from './components/MessageWidget.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    HelloWorld,
+    MessageWidget
   }
 }
 </script>
