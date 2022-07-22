@@ -1,5 +1,8 @@
 <template>
   <div>
+    <!-- File Upload -->
+    <!-- Photo -->
+    <!-- Emoji -->
     <textarea
       placeholder="새로운 메시지를 입력하세요..."
       v-model="message"

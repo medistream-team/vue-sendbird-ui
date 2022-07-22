@@ -5,8 +5,9 @@
       <hello-world msg="Welcome to Your Vue.js App"></hello-world>
     </div>
     <div class="preview">
-      <br><br><br>
-      <MessageWidget />
+      <message-widget
+        :sort-direction="'top'"
+      ></message-widget>
     </div>
   </div>
 </template>
@@ -37,6 +38,7 @@ export default {
   color: #2c3e50;
 }
 .preview {
+  overflow: auto;
   position: fixed;
   top: 50%;
   left: 75%;
