@@ -2,7 +2,7 @@
   <div id="app">
     <div class="about">
       <img alt="Vue logo" src="@/assets/logo.png">
-      <hello-world msg="Welcome to Your Vue.js App"></hello-world>
+      
     </div>
     <div class="preview">
       <message-widget
@@ -13,13 +13,13 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
 import MessageWidget from './components/MessageWidget.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
+    
     MessageWidget
   }
 }

@@ -86,12 +86,27 @@ class SendbirdAction {
   }
 
   sendUserMessage(message) {
+    
     return new Promise((resolve, reject) => {
       this.channel.sendUserMessage(message, (userMessage, error) => {
         error ? reject(error) : resolve(userMessage)
       })
     })
   }
+
+
+  sendFileMessage(file) {
+    //const fileMessageParams = this.sb.FileMessageParams();
+    //fileMessageParams.file = file;
+    //fileMessageParams.thumbnailSizes = thumbnailSizes;
+    console.log(file);
+    return new Promise((resolve, reject) => { 
+      this.channel.sendFileMessage(file, (userFile, error) => {
+      error ? reject(error) : resolve(userFile)
+    })
+  })
+}
+
 
   getMessageList() {
     return new Promise((resolve, reject) => {
