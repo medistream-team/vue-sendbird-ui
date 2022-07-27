@@ -103,6 +103,13 @@ class SendbirdAction {
         this.previousMessageQuery.hasMore &&
         !this.previousMessageQuery.isLoading
       ) {
+
+        // const params = new this.sb.MessageListParams();
+        // params.prevResultSize = 10;
+        // this.channel.getMessagesByTimestamp(Date.now(), params, (messages) => {
+        //   console.log(messages);
+        // });
+
         //로드되는 메세지 조절 parameter에 loadCount 넣고 아래에 getMessageList호출 될 때 ...
         this.previousMessageQuery.load(10, (messageList, error) => {
           const response = {
