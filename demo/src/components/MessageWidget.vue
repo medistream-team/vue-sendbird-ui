@@ -5,7 +5,7 @@
     <message-header></message-header>
     <!-- <file-import @fileSelect="addInputFile"></file-import> -->
     <message-input @addInputMessage="addInputMessage"></message-input>
-    <message-log v-model="msg"></message-log>
+    <message-log v-model="messages"></message-log>
   </div>
 </template>
 
