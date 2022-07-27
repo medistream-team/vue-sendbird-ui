@@ -1,37 +1,55 @@
 <template>
-  <div class="message-log">
-    <ul v-if="messages.itemList.length > 0">
+  <div class="chat-container">
+    <ul v-if="msg.itemList.length > 0">
       <li
         class="chat-item"
-        v-for="message in messages.itemList"
+        v-for="message in msg.itemList"
         :key="message.messageId"
       >
-        <p>{{ message.sender.nickname }}</p>
         <div style="white-space: pre-wrap">{{ message.message }}</div>
         <p>{{ convertDate(message.createdAt) }}</p>
       </li>
+      <button @click="moreMessage" v-if="msg.hasMoreMessage">더보기</button>
     </ul>
-    <button @click="more" v-if="messages.hasMoreMessage">더보기</button>
+    <infinite-loading
+      @infinite="infiniteHandler"
+      spinner="bubbles"
+    ></infinite-loading>
   </div>
 </template>
-
+<!-- 
+<p>{{ convertDate(message.createdAt) }}</p>
+ <button @click="more" v-if="messages.hasMoreMessage">더보기</button>
+-->
 <script>
-import { SendbirdAction } from '@/sendbird/SendbirdAction'
-import { SendBirdEvent } from '@/sendbird/SendbirdEvent'
-import { format } from 'date-fns'
+import { format } from "date-fns";
+import InfiniteLoading from "vue-infinite-loading";
+import { SendbirdAction } from "@/sendbird/SendbirdAction";
 
 export default {
-  name: 'MessageLog',
+  components: {
+    InfiniteLoading,
+  },
+  name: "MessageLog",
   data() {
     return {
-      messages: {
-        hasMoreMessage: false,
-        itemList: [],
-      },
+      page: 1,
+      limit: 0,
     };
   },
+  inject: ["msg"],
   methods: {
-    more: function () {
+    convertDate(date) {
+      return format(date, "HH:mm");
+    },
+    addInputMessage: function (message) {
+      this.messages.itemList = [message].concat(this.messages.itemList);
+    },
+    Clcick() {
+      console.log(this.msg.hasMoreMessage);
+    },
+    infiniteHandler() {},
+    moreMessage() {
       SendbirdAction.getInstance()
         .getMessageList()
         .then((response) => {
@@ -41,29 +59,37 @@ export default {
           );
         });
     },
-    convertDate(date) {
-      return format(date, "yyyy년 M월 dd일 HH:mm");
+  },
+
+  computed: {
+    messageFilter() {
+      return this.msg.filter((msg) =>
+        msg.itemList.sort(function (a, b) {
+          return a.messageId - b.messageId;
+        })
+      );
     },
   },
-  async created() {
-    const sendbirdAction = SendbirdAction.getInstance();
-    const error = await sendbirdAction.init();
-
-    if (!error) {
-      sendbirdAction
-        .getMessageList()
-        .then((response) => (this.messages = response));
-
-      const channelEvent = new SendBirdEvent();
-      channelEvent.onMessageReceived((message) => {
-        this.messages.itemList = [message].concat(this.messages.itemList);
-      });
-    }
-  },
-}
+};
 </script>
 
 <style scoped>
-
+.chat-item {
+  position: relative;
+  width: 320px;
+  padding: 25px;
+  margin: 25px;
+  border-radius: 15px;
+  background-color: #1d77ff;
+  color: white;
+  list-style: none;
+  font-size: 16px;
+}
+.chat-item p {
+  position: absolute;
+  bottom: -10px;
+  right: 0;
+  margin-right: -50px;
+  color: #000;
+}
 </style>
-  
