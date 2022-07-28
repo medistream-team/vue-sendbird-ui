@@ -1,13 +1,15 @@
 <template>
   <div class="chat-container">
     <!-- <header-bar></header-bar> -->
-    <file-import @fileSelect="addInputFile"></file-import> 
+    <file-import></file-import>
+    <!-- <file-import @fileSelect="addInputFile"></file-import> -->
     <message-input @addInputMessage="addInputMessage"></message-input>
     <message-log v-model="msg"></message-log>
   </div>
 </template>
 
 <script>
+import FileImport from "@/components/FileImport";
 import MessageInput from "@/components/MessageInput";
 import MessageLog from "@/components/MessageLog";
 import { computed } from "vue";
@@ -17,6 +19,7 @@ import { SendBirdEvent } from '@/sendbird/SendbirdEvent'
 export default {
   name: "MessageWidget",
   components: {
+    FileImport,
     MessageInput,
     MessageLog,
   },
