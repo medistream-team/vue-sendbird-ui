@@ -9,7 +9,6 @@
     "start": "npm run serve & node server.js"
   },
   "dependencies": {
-    "aws-sdk": "^2.1183.0",
     "core-js": "^3.8.3",
     "date-fns": "^2.28.0",
     "filepond-plugin-file-validate-type": "^1.2.8",
