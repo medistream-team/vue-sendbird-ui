@@ -25,19 +25,11 @@ class SendbirdAction {
       this.previousMessageQuery = this.channel.createPreviousMessageListQuery();
 
       this.previousMessageQuery.reverse = true;
-      // console.log(this.channel.members[0].nickname); 닉네임 불러오기
-
-      // this.previousMessageQuery.limit = 5;
-      //toggle 버튼을 눌렀을 때 고려할 것 reverse , input위치
     } catch (e) {
       error = e;
     }
     return error;
   }
-  // const params = new this.sb.MessageListParams();
-  //     params.reverse = false;
-  inputToggle() {}
-
   create() {
     const params = new this.sb.GroupChannelParams();
     params.isPublic = true;
@@ -101,14 +93,6 @@ class SendbirdAction {
     });
   }
 
-  // this.previousMessageQuery.load(20, (messageList, error) => {
-  //   const response = {
-  //     hasMoreMessage: this.previousMessageQuery.hasMore,
-  //     itemList: messageList,
-  //   };
-  //   error ? reject(error) : resolve(response);
-  // });
-
   getMessageList(loadMessage) {
     return new Promise((resolve, reject) => {
       if (
@@ -131,20 +115,12 @@ class SendbirdAction {
           }
         );
 
-        // const params = new this.sb.MessageListParams();
-        // params.prevResultSize = 10;
-        // this.channel.getMessagesByTimestamp(Date.now(), params, (messages) => {
-        //   console.log(messages);
-        // });
-
-        //로드되는 메세지 조절 parameter에 loadCount 넣고 아래에 getMessageList호출 될 때 ...
         this.previousMessageQuery.load(10, (messageList, error) => {
           const response = {
             hasMoreMessage: this.previousMessageQuery.hasMore,
             itemList: messageList,
           };
           error ? reject(error) : resolve(response);
-          //response {hasMoreMessage: true, itemList: Array(10)}
         });
       } else {
         resolve([]);
