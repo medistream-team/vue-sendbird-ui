@@ -1,19 +1,20 @@
 <template>
   <div class="chat-container">
     <!-- <header-bar></header-bar> -->
-    <button v-on:click="toggle">toggle</button>
+    <!-- <button v-on:click="toggle">toggle</button> -->
     <message-header></message-header>
     <!-- <file-import @fileSelect="addInputFile"></file-import> -->
 
     <message-input v-if="toggleValue" @addInputMessage="addInputMessage">
     </message-input>
 
+    {{ sortDirection }}
     <message-log v-model="messages"> </message-log>
     <message-input v-if="!toggleValue" @addInputMessage="addInputMessage">
     </message-input>
 
-    <message-input @addInputMessage="addInputMessage"></message-input>
-    <message-log v-model="messages"></message-log>
+    <!-- <message-input @addInputMessage="addInputMessage"></message-input>
+    <message-log v-model="messages"></message-log> -->
   </div>
 </template>
 
@@ -35,7 +36,7 @@ export default {
   props: {
     sortDirection: {
       type: String,
-      default: "bottom",
+      default: 'top',
     },
   },
   provide() {
@@ -47,13 +48,21 @@ export default {
   },
   data() {
     return {
-      toggleValue: false,
+      // toggleValue: false,
       messages: {
         hasMoreMessage: false,
         itemList: [],
       },
       loadMessage: Number,
     };
+  },
+  watch: {
+    sortDirection: {
+      immediate: true,
+      handler: function (value) {
+        console.log('메시지 정렬 방향: ' + value);
+      }
+    }
   },
   methods: {
     addInputMessage: function (message) {
