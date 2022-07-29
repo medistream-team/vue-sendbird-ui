@@ -1,13 +1,13 @@
 <template>
   <div class="chat-container">
     <!-- <header-bar></header-bar> -->
+
     <!-- <button v-on:click="toggle">toggle</button> -->
     <message-header></message-header>
     <!-- <file-import @fileSelect="addInputFile"></file-import> -->
-
+    <file-import @fileSelect="addInputFile"></file-import>
     <message-input v-if="toggleValue" @addInputMessage="addInputMessage">
     </message-input>
-
     {{ sortDirection }}
     <message-log v-model="messages"> </message-log>
     <message-input v-if="!toggleValue" @addInputMessage="addInputMessage">
@@ -19,6 +19,7 @@
 import { SendbirdAction } from "@/sendbird/SendbirdAction";
 import { SendBirdEvent } from "@/sendbird/SendbirdEvent";
 import { computed } from "vue";
+import FileImport from "@/components/FileImport";
 import MessageInput from "@/components/MessageInput";
 import MessageLog from "@/components/MessageLog";
 import MessageHeader from "./MessageHeader.vue";
@@ -26,8 +27,10 @@ import MessageHeader from "./MessageHeader.vue";
 export default {
   name: "MessageWidget",
   components: {
+    FileImport,
     MessageInput,
     MessageLog,
+
     MessageHeader,
   },
   props: {
@@ -43,6 +46,7 @@ export default {
       }),
     };
   },
+
   data() {
     return {
       // toggleValue: false,
@@ -75,6 +79,10 @@ export default {
       const sendbirdAction = SendbirdAction.getInstance();
       sendbirdAction.getMessageList(this.loadMessage);
     },
+
+    addInputFile: function (file) {
+      this.messages.itemList = [file].concat(this.messages.itemList);
+    },
   },
 
   async created() {
@@ -82,14 +90,20 @@ export default {
     const error = await sendbirdAction.init();
 
     // this.msg,,,,,
+
     if (!error) {
       sendbirdAction
-        .getMessageList(20)
+        .getMessageList()
+
         .then((response) => (this.messages = response));
 
       const channelEvent = new SendBirdEvent();
       channelEvent.onMessageReceived((message) => {
         this.messages.itemList = [message].concat(this.messages.itemList);
+      });
+
+      channelEvent.onMessageReceived((file) => {
+        this.messages.itemList = [file].concat(this.messages.itemList);
       });
     }
   },

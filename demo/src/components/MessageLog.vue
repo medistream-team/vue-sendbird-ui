@@ -1,19 +1,20 @@
 <template>
   <div class="chat-container">
-    <ul v-if="msg.itemList.length > 0">
-      <li
-        class="chat-item"
-        v-for="message in msg.itemList"
-        :key="message.messageId"
-      >
-        <div style="white-space: pre-wrap">{{ message.message }}</div>
-        <div>{{ message.messageId }}</div>
-        <p>{{ convertDate(message.createdAt) }}</p>
-      </li>
-      <button @click="checkY">눌러임마</button>
-      <button @click="testt">conso</button>
-    </ul>
-
+    <div class="message-log">
+      <ul v-if="msg.itemList.length > 0">
+        <li
+          class="chat-item"
+          v-for="message in msg.itemList"
+          :key="message.messageId"
+        >
+          <div style="white-space: pre-wrap">{{ message.message }}</div>
+          <div>{{ message.messageId }}</div>
+          <p>{{ convertDate(message.createdAt) }}</p>
+        </li>
+        <button @click="checkY">눌러임마</button>
+        <button @click="testt">conso</button>
+      </ul>
+    </div>
     <infinite-loading
       @infinite="infiniteHandler"
       spinner="bubbles"

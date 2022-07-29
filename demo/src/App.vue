@@ -1,9 +1,14 @@
 <template>
   <div id="app">
     <div class="about">
+
       <button type="button" @click="toggleSortDirection()">
         방향 토글하기 ({{ sortDirection }})
       </button>
+
+      <img alt="Vue logo" src="@/assets/logo.png">
+      
+
     </div>
     <div class="preview">
       <message-widget :sort-direction="sortDirection"></message-widget>

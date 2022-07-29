@@ -93,6 +93,16 @@ class SendbirdAction {
     });
   }
 
+  sendFileMessage(file) {
+    const fileMessageParams = new this.sb.FileMessageParams();
+    fileMessageParams.file = file;
+    return new Promise((resolve, reject) => {
+      this.channel.sendFileMessage(fileMessageParams, (userFile, error) => {
+        error ? reject(error) : resolve(userFile);
+      });
+    });
+  }
+
   getMessageList(loadMessage) {
     return new Promise((resolve, reject) => {
       if (

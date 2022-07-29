@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "start": "npm run serve & node server.js"
   },
   "dependencies": {
     "core-js": "^3.8.3",
@@ -13,7 +14,12 @@
     "inticons": "^0.3.6",
     "sendbird": "^3.1.21",
     "vue": "^2.6.14",
-    "vue-infinite-loading": "^2.4.5"
+    "vue-infinite-loading": "^2.4.5",
+    "filepond-plugin-file-validate-type": "^1.2.8",
+    "filepond-plugin-image-edit": "^1.6.3",
+    "filepond-plugin-image-preview": "^4.6.11",
+   
+    "vue-filepond": "^6.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -21,8 +27,11 @@
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
+    "cors": "^2.8.5",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
+    "express": "^4.18.1",
+    "multer": "^1.4.5-lts.1",
     "vue-template-compiler": "^2.6.14"
   },
   "eslintConfig": {

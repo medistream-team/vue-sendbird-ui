@@ -2,6 +2,7 @@
   <div class="input-container">
     <div class="file-send">아</div>
     <!-- File Upload -->
+    <!-- <file-import></file-import> -->
     <!-- Photo -->
     <!-- Emoji -->
     <textarea
@@ -9,20 +10,28 @@
       v-model="message"
       @keydown.enter.exact.prevent="sendMessage"
     />
-    <button v-if="message" @click="sendMessage">보내기</button>
+
+    <button v-if= "message" @click="sendMessage">보내기</button>
+
+  
   </div>
 </template>
 
 <script>
 import { SendbirdAction } from "@/sendbird/SendbirdAction";
 
+
+
 export default {
-  name: "MessageInput",
+  name: 'MessageInput',
+
   data() {
     return {
-      message: "",
-    };
+      message: '',
+      file:'',
+    }
   },
+
   methods: {
     sendMessage: function (event) {
       if (event.isComposing) {
@@ -35,8 +44,22 @@ export default {
           this.message = "";
         });
     },
-  },
+
+
+     handleFilesUpload: function (fileurl) {
+
+      this.file=fileurl;
+      SendbirdAction.getInstance()
+      .sendFileMessage(this.file)
+        .then((file) => {
+          this.$emit('addInputFile', file)
+        })
+    },
+
+},
+
 };
+
 </script>
 
 <style scoped></style>
