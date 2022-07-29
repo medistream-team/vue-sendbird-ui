@@ -1,7 +1,7 @@
 <template>
   <div class="chat-container">
     <!-- <header-bar></header-bar> -->
-    <file-import></file-import>
+    <file-import  @fileSelect="addInputFile"></file-import> 
     <!-- <file-import @fileSelect="addInputFile"></file-import> -->
     <message-input @addInputMessage="addInputMessage"></message-input>
     <message-log v-model="msg"></message-log>

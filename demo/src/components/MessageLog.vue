@@ -24,6 +24,8 @@ export default {
   data() {
     return {};
   },
+  
+
   inject: ["msg"],
   methods: {
     convertDate(date) {

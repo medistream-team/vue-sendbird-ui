@@ -6,8 +6,10 @@
       label-idle="드래그 앤 드롭 or <span class='filepond--label-action'>파일찾기</span>"
       accepted-file-types="image/jpeg, image/png"
       :allow-multiple="true"
-      v-on:init="handleFilePondInit">
+      v-on:init="handleFilePondInit"
+      >
     </file-pond>
+
   </div>
 </template>
 
@@ -21,6 +23,10 @@ const FilePond = vueFilePond(
   FilePondPluginFileValidateType,
   FilePondPluginImagePreview
 )
+
+// eslint-disable-next-line no-unused-vars
+let imgUrl = "";
+
 setOptions({
   server: {
     url: 'http://localhost:3000/',
@@ -31,11 +37,14 @@ setOptions({
       timeout: 7000,
       onload: (response) => {
         console.log(JSON.parse(response));
+        imgUrl = JSON.parse(response)[0].url;
       },
       onerror: null
     },
   }
 })
+
+
 export default {
   name: 'FileImport',
   components: {
@@ -45,10 +54,12 @@ export default {
     return {
     }
   },
+
   methods: {
     handleFilePondInit: function () {
       console.log('FilePond has initialized');
     },
+
   },
 };
 </script>

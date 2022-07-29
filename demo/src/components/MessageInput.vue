@@ -1,6 +1,7 @@
 <template>
   <div>
     <!-- File Upload -->
+    <!-- <file-import></file-import> -->
     <!-- Photo -->
     <!-- Emoji -->
     <textarea
@@ -9,9 +10,9 @@
       @keydown.enter.exact.prevent="sendMessage"
     />
 
-    <button v-if= "message || file" @click="sendMessage">보내기</button>
-  
+    <button v-if= "message" @click="sendMessage">보내기</button>
 
+  
   </div>
 </template>
 
@@ -19,14 +20,17 @@
 import { SendbirdAction } from '@/sendbird/SendbirdAction'
 
 
+
 export default {
   name: 'MessageInput',
+
   data() {
     return {
       message: '',
       file:'',
     }
   },
+
   methods: {
     sendMessage: function (event) {
       if (event.isComposing) {
@@ -40,18 +44,16 @@ export default {
         })
     },
 
-/*
-     handleFilesUpload: function (event) {
 
-      this.file = event.target.files[0];
+     handleFilesUpload: function (fileurl) {
 
+      this.file=fileurl;
       SendbirdAction.getInstance()
       .sendFileMessage(this.file)
         .then((file) => {
           this.$emit('addInputFile', file)
         })
     },
-*/
 
 },
 

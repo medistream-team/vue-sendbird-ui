@@ -96,12 +96,11 @@ class SendbirdAction {
 
 
   sendFileMessage(file) {
-    //const fileMessageParams = this.sb.FileMessageParams();
-    //fileMessageParams.file = file;
-    //fileMessageParams.thumbnailSizes = thumbnailSizes;
-    console.log(file);
+    
+    const fileMessageParams = new this.sb.FileMessageParams();
+    fileMessageParams.file = file;
     return new Promise((resolve, reject) => { 
-      this.channel.sendFileMessage(file, (userFile, error) => {
+      this.channel.sendFileMessage(fileMessageParams, (userFile, error) => {
       error ? reject(error) : resolve(userFile)
     })
   })
