@@ -1,11 +1,15 @@
 <template>
   <div class="chat-container">
     <!-- <header-bar></header-bar> -->
-    <button @click="powerClick">ddddd</button>
+    <button v-on:click="toggle">toggle</button>
     <message-header></message-header>
     <!-- <file-import @fileSelect="addInputFile"></file-import> -->
-    <message-input @addInputMessage="addInputMessage"></message-input>
-    <message-log v-model="msg"></message-log>
+    <message-input v-if="toggleValue" @addInputMessage="addInputMessage">
+    </message-input>
+
+    <message-log v-model="messages"> </message-log>
+    <message-input v-if="!toggleValue" @addInputMessage="addInputMessage">
+    </message-input>
   </div>
 </template>
 
@@ -25,10 +29,10 @@ export default {
     MessageHeader,
   },
   props: {
-    // sortDirection: {
-    //   type: String,
-    //   default: 'bottom'
-    // }
+    sortDirection: {
+      type: String,
+      default: "bottom",
+    },
   },
   provide() {
     return {
@@ -39,29 +43,38 @@ export default {
   },
   data() {
     return {
+      toggleValue: false,
       messages: {
         hasMoreMessage: false,
         itemList: [],
       },
+      loadMessage: Number,
     };
   },
   methods: {
     addInputMessage: function (message) {
       this.messages.itemList = [message].concat(this.messages.itemList);
     },
-    powerClick() {
-      console.log(this.messages.itemList[4].url);
+
+    toggle() {
+      this.messages.itemList.reverse();
+      this.toggleValue = !this.toggleValue;
+    },
+
+    scroll() {
+      const sendbirdAction = SendbirdAction.getInstance();
+      sendbirdAction.getMessageList(this.loadMessage);
     },
   },
 
   async created() {
-    const sendbirdAction = SendbirdAction.getInstance("김인태");
+    const sendbirdAction = SendbirdAction.getInstance();
     const error = await sendbirdAction.init();
 
     // this.msg,,,,,
     if (!error) {
       sendbirdAction
-        .getMessageList()
+        .getMessageList(20)
         .then((response) => (this.messages = response));
 
       const channelEvent = new SendBirdEvent();

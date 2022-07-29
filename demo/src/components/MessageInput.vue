@@ -39,31 +39,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.input-container {
-  display: flex;
-  align-items: center;
-  position: fixed;
-  z-index: 10;
-  background-color: white;
-  bottom: 0;
-  height: 80px;
-  width: 100%;
-  border: 1px solid #ceccce;
-}
-.file-send {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  width: 36px;
-  height: 36px;
-  border: 1px solid #ceccce;
-}
-textarea {
-  background-color: white;
-  width: 100%;
-  height: 36px;
-  border: 1px solid #ceccce;
-}
-</style>
+<style scoped></style>

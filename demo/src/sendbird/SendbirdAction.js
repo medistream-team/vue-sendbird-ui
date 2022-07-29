@@ -24,15 +24,19 @@ class SendbirdAction {
       await this.join();
       this.previousMessageQuery = this.channel.createPreviousMessageListQuery();
 
+      this.previousMessageQuery.reverse = true;
       // console.log(this.channel.members[0].nickname); 닉네임 불러오기
 
-      // this.previousMessageQuery.limit = 20;
-      this.previousMessageQuery.reverse = true;
+      // this.previousMessageQuery.limit = 5;
+      //toggle 버튼을 눌렀을 때 고려할 것 reverse , input위치
     } catch (e) {
       error = e;
     }
     return error;
   }
+  // const params = new this.sb.MessageListParams();
+  //     params.reverse = false;
+  inputToggle() {}
 
   create() {
     const params = new this.sb.GroupChannelParams();
@@ -97,21 +101,35 @@ class SendbirdAction {
     });
   }
 
-  getMessageList() {
+  // this.previousMessageQuery.load(20, (messageList, error) => {
+  //   const response = {
+  //     hasMoreMessage: this.previousMessageQuery.hasMore,
+  //     itemList: messageList,
+  //   };
+  //   error ? reject(error) : resolve(response);
+  // });
+
+  getMessageList(loadMessage) {
     return new Promise((resolve, reject) => {
       if (
         this.previousMessageQuery.hasMore &&
         !this.previousMessageQuery.isLoading
       ) {
-        //로드되는 메세지 조절 parameter에 loadCount 넣고 아래에 getMessageList호출 될 때 ...
-        this.previousMessageQuery.load(10, (messageList, error) => {
-          const response = {
-            hasMoreMessage: this.previousMessageQuery.hasMore,
-            itemList: messageList,
-          };
-          error ? reject(error) : resolve(response);
-          //response {hasMoreMessage: true, itemList: Array(10)}
-        });
+        const params = new this.sb.MessageListParams();
+        //scroll을 내릴 때 마다 증가시킨다?
+        params.prevResultSize = loadMessage;
+        this.channel.getMessagesByTimestamp(
+          Date.now(),
+          params,
+          (messages, error) => {
+            console.log(messages);
+            const response = {
+              hasMoreMessage: this.previousMessageQuery.hasMore,
+              itemList: messages,
+            };
+            error ? reject(error) : resolve(response);
+          }
+        );
       } else {
         resolve([]);
       }

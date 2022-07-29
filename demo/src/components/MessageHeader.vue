@@ -1,45 +1,50 @@
 <template>
   <div class="chat-header">
     <p>🕳user</p>
-    <input type="text" />
+    <input type="text" v-model="filteringText" />
+    <p>{{ filteringText }}</p>
 
-    <button @click="click">dddd</button>
+    <!-- {{ filteringText | messageFilter }}-->
+
+    <div></div>
   </div>
 </template>
 
 <script>
-// 
+//
 
 export default {
   data() {
-    return {};
+    return {
+      filteringText: "",
+      test: "",
+    };
   },
   inject: ["msg"],
+
+  filters: {
+    messageFilter() {
+      return this.msg.itemList
+        .map((message) => message.message)
+        .filter((num) => {
+          return num.toLowerCase().includes(this.filteringText.toLowerCase());
+        });
+    },
+  },
+
   methods: {
     click() {
       //메세지 내용 itemList.message에서 filtering
-      console.log(this.msg.itemList[0].message);
+      //ref?? 요소에 직접적으로 적어야함.
+      const chat = document.querySelector(
+        ".chat-container li:nth-child(2) div"
+      );
+      console.log(chat.innerText);
+      console.log(this.filteringNumber);
     },
   },
+  computed: {},
 };
 </script>
 
-<style scope>
-.chat-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 80px;
-  width: 100%;
-  border: 1px solid #ceccce;
-  font-size: 20px;
-}
-.chat-header p {
-  margin-left: 20px;
-}
-.chat-header input {
-  width: 250px;
-  height: 30px;
-  margin-right: 30px;
-}
-</style>
+<style scope></style>
