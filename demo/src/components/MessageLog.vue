@@ -44,7 +44,7 @@ export default {
 
   methods: {
     convertDate(date) {
-      return format(date, "HH:mm");
+      return format(date, "yyyy-MM-dd HH:mm");
     },
     addInputMessage: function (message) {
       this.messages.itemList = [message].concat(this.messages.itemList);
