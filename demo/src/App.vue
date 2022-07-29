@@ -1,8 +1,12 @@
 <template>
   <div id="app">
-    <div class="about"></div>
+    <div class="about">
+      <button type="button" @click="toggleSortDirection()">
+        방향 토글하기 ({{ sortDirection }})
+      </button>
+    </div>
     <div class="preview">
-      <message-widget :sort-direction="'top'"></message-widget>
+      <message-widget :sort-direction="sortDirection"></message-widget>
     </div>
   </div>
 </template>
@@ -15,6 +19,16 @@ export default {
   components: {
     MessageWidget,
   },
+  data () {
+    return {
+      sortDirection: 'top'
+    }
+  },
+  methods: {
+    toggleSortDirection: function () {
+      this.sortDirection = (this.sortDirection === 'top' ? 'bottom' : 'top');
+    }
+  }
 };
 </script>
 
