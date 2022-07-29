@@ -4,12 +4,16 @@
     <button v-on:click="toggle">toggle</button>
     <message-header></message-header>
     <!-- <file-import @fileSelect="addInputFile"></file-import> -->
+
     <message-input v-if="toggleValue" @addInputMessage="addInputMessage">
     </message-input>
 
     <message-log v-model="messages"> </message-log>
     <message-input v-if="!toggleValue" @addInputMessage="addInputMessage">
     </message-input>
+
+    <message-input @addInputMessage="addInputMessage"></message-input>
+    <message-log v-model="messages"></message-log>
   </div>
 </template>
 
