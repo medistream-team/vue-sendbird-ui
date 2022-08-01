@@ -41,12 +41,15 @@ export default {
       }),
     };
   },
+
   data() {
     return {
+      // toggleValue: false,
       messages: {
         hasMoreMessage: false,
         itemList: [],
       },
+      loadMessage: Number,
     };
   },
 
@@ -58,12 +61,13 @@ export default {
       },
     },
   },
-
   methods: {
     addInputMessage: function (message) {
       this.messages.itemList = [message].concat(this.messages.itemList);
 
     },
+
+
     addInputFile: function (file) {
       console.log("hi", file.url)
       this.messages.itemList = [file].concat(this.messages.itemList);
@@ -75,14 +79,17 @@ export default {
     },
 
   },
-  
+
   async created() {
     const sendbirdAction = SendbirdAction.getInstance();
     const error = await sendbirdAction.init();
 
+    // this.msg,,,,,
+
     if (!error) {
       sendbirdAction
         .getMessageList()
+
         .then((response) => (this.messages = response));
 
       const channelEvent = new SendBirdEvent();
@@ -91,10 +98,9 @@ export default {
         this.messages.itemList = [message].concat(this.messages.itemList);
       });
 
-       channelEvent.onMessageReceived((file) => {
+      channelEvent.onMessageReceived((file) => {
         this.messages.itemList = [file].concat(this.messages.itemList);
       });
-
     }
   },
 };

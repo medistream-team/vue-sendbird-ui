@@ -8,6 +8,7 @@
 
       <img alt="Vue logo" src="@/assets/logo.png">
       
+
     </div>
     <div class="preview">
       <message-widget
@@ -18,11 +19,10 @@
 </template>
 
 <script>
-
-import MessageWidget from './components/MessageWidget.vue'
+import MessageWidget from "./components/MessageWidget.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     MessageWidget
   },

@@ -20,19 +20,28 @@
     </ul>
   </div>
 </template>
-
+<!-- 
+<p>{{ convertDate(message.createdAt) }}</p>
+ <button @click="more" v-if="messages.hasMoreMessage">더보기</button>
+-->
 <script>
-
 import { format } from "date-fns";
+import InfiniteLoading from "vue-infinite-loading";
 
 export default {
+  components: {
+    InfiniteLoading,
+  },
   name: "MessageLog",
   data() {
-    return {};
+    return {
+      page: 1,
+      limit: 0,
+    };
   },
-  
 
   inject: ["msg"],
+
   methods: {
     convertDate(date) {
       return format(date, "yyyy-MM-dd HH:mm");
@@ -48,7 +57,12 @@ export default {
       }
     }
   },
- 
+  provide() {
+    return {
+      title: "김인태",
+    };
+  },
+  computed: {},
 };
 </script>
 
