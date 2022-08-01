@@ -26,12 +26,9 @@
 -->
 <script>
 import { format } from "date-fns";
-import InfiniteLoading from "vue-infinite-loading";
 
 export default {
-  components: {
-    InfiniteLoading,
-  },
+ 
   name: "MessageLog",
   data() {
     return {
