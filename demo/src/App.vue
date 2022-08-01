@@ -6,12 +6,22 @@
         방향 토글하기 인 ({{ sortDirection }})
       </button>
 
-      <img alt="Vue logo" src="@/assets/logo.png">
-      
+      <br>
+
+      <button type="button" @click="userId = 'user1'">
+        사용자 user1
+      </button>
+      <button type="button" @click="userId = 'user2'">
+        사용자 user2
+      </button>
+
+      <!-- <img alt="Vue logo" src="@/assets/logo.png"> -->
 
     </div>
     <div class="preview">
       <message-widget
+        channel-id="sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed"
+        :user-id="userId"
         :sort-direction="sortDirection"
       ></message-widget>
     </div>
@@ -28,6 +38,7 @@ export default {
   },
    data() {
     return {
+      userId: 'user1',
       sortDirection: "top",
     };
   },

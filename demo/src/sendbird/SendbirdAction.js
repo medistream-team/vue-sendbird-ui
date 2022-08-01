@@ -14,10 +14,11 @@ class SendbirdAction {
     instance = this;
   }
 
-  async init() {
+  async init(channelId, userId) {
+    console.log(channelId, userId);
     let error = null;
     try {
-      await this.connect('admin', '김인태')
+      await this.connect('user1', 'User 1')
       this.channel = await this.getChannel(
         "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed"
       );
