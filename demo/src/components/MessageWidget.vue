@@ -1,33 +1,38 @@
 <template>
   <div class="chat-container">
     <!-- <header-bar></header-bar> -->
-    <file-import  @fileSelect="addInputFile"></file-import> 
-    <!-- <file-import @fileSelect="addInputFile"></file-import> -->
-    <message-input @addInputMessage="addInputMessage"></message-input>
-    <message-log v-model="msg"></message-log>
+    <message-header></message-header>
+     <!--file-import @fileSelect="addInputFile"></file-import> -->
+     <message-input @addInputMessage="addInputMessage" 
+                    @addInputFile="addInputFile">
+     </message-input> 
+    <message-log v-model="messages"></message-log>
   </div>
 </template>
 
 <script>
-import FileImport from "@/components/FileImport";
+//import FileImport from "@/components/FileImport";
 import MessageInput from "@/components/MessageInput";
 import MessageLog from "@/components/MessageLog";
+import MessageHeader from "./MessageHeader.vue";
 import { computed } from "vue";
 import { SendbirdAction } from '@/sendbird/SendbirdAction'
 import { SendBirdEvent } from '@/sendbird/SendbirdEvent'
 
+
 export default {
   name: "MessageWidget",
   components: {
-    FileImport,
+    //FileImport,
     MessageInput,
     MessageLog,
-  },
+    MessageHeader,
+},
   props: {
-    // sortDirection: {
-    //   type: String,
-    //   default: 'bottom'
-    // }
+     sortDirection: {
+       type: String,
+       default: 'top'
+     }
   },
   provide() {
     return {
@@ -44,13 +49,31 @@ export default {
       },
     };
   },
+
+   watch: {
+    sortDirection: {
+      immediate: true,
+      handler: function (value) {
+        console.log("메시지 정렬 방향: " + value);
+      },
+    },
+  },
+
   methods: {
     addInputMessage: function (message) {
       this.messages.itemList = [message].concat(this.messages.itemList);
+
     },
     addInputFile: function (file) {
+      console.log("hi", file.url)
       this.messages.itemList = [file].concat(this.messages.itemList);
     }, 
+
+    scroll() {
+      const sendbirdAction = SendbirdAction.getInstance();
+      sendbirdAction.getMessageList(this.loadMessage);
+    },
+
   },
   
   async created() {
@@ -63,6 +86,7 @@ export default {
         .then((response) => (this.messages = response));
 
       const channelEvent = new SendBirdEvent();
+
       channelEvent.onMessageReceived((message) => {
         this.messages.itemList = [message].concat(this.messages.itemList);
       });
