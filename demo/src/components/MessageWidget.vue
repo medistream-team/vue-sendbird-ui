@@ -1,43 +1,38 @@
 <template>
   <div class="chat-container">
     <!-- <header-bar></header-bar> -->
-
-    <!-- <button v-on:click="toggle">toggle</button> -->
     <message-header></message-header>
-    <!-- <file-import @fileSelect="addInputFile"></file-import> -->
-    <file-import @fileSelect="addInputFile"></file-import>
-    <message-input v-if="toggleValue" @addInputMessage="addInputMessage">
-    </message-input>
-    {{ sortDirection }}
-    <message-log v-model="messages"> </message-log>
-    <message-input v-if="!toggleValue" @addInputMessage="addInputMessage">
-    </message-input>
+     <!--file-import @fileSelect="addInputFile"></file-import> -->
+     <message-input @addInputMessage="addInputMessage" 
+                    @addInputFile="addInputFile">
+     </message-input> 
+    <message-log v-model="messages"></message-log>
   </div>
 </template>
 
 <script>
-import { SendbirdAction } from "@/sendbird/SendbirdAction";
-import { SendBirdEvent } from "@/sendbird/SendbirdEvent";
-import { computed } from "vue";
-import FileImport from "@/components/FileImport";
+//import FileImport from "@/components/FileImport";
 import MessageInput from "@/components/MessageInput";
 import MessageLog from "@/components/MessageLog";
 import MessageHeader from "./MessageHeader.vue";
+import { computed } from "vue";
+import { SendbirdAction } from '@/sendbird/SendbirdAction'
+import { SendBirdEvent } from '@/sendbird/SendbirdEvent'
+
 
 export default {
   name: "MessageWidget",
   components: {
-    FileImport,
+    //FileImport,
     MessageInput,
     MessageLog,
-
     MessageHeader,
-  },
+},
   props: {
-    sortDirection: {
-      type: String,
-      default: "top",
-    },
+     sortDirection: {
+       type: String,
+       default: 'top'
+     }
   },
   provide() {
     return {
@@ -57,7 +52,8 @@ export default {
       loadMessage: Number,
     };
   },
-  watch: {
+
+   watch: {
     sortDirection: {
       immediate: true,
       handler: function (value) {
@@ -68,21 +64,20 @@ export default {
   methods: {
     addInputMessage: function (message) {
       this.messages.itemList = [message].concat(this.messages.itemList);
+
     },
 
-    toggle() {
-      this.messages.itemList.reverse();
-      this.toggleValue = !this.toggleValue;
-    },
+
+    addInputFile: function (file) {
+      console.log("hi", file.url)
+      this.messages.itemList = [file].concat(this.messages.itemList);
+    }, 
 
     scroll() {
       const sendbirdAction = SendbirdAction.getInstance();
       sendbirdAction.getMessageList(this.loadMessage);
     },
 
-    addInputFile: function (file) {
-      this.messages.itemList = [file].concat(this.messages.itemList);
-    },
   },
 
   async created() {
@@ -98,6 +93,7 @@ export default {
         .then((response) => (this.messages = response));
 
       const channelEvent = new SendBirdEvent();
+
       channelEvent.onMessageReceived((message) => {
         this.messages.itemList = [message].concat(this.messages.itemList);
       });
