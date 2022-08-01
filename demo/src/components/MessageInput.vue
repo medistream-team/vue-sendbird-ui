@@ -8,7 +8,7 @@
 <!-- File Upload -->
     <!-- <file-import></file-import> -->
     <!--<FileImport @customChange = "printthis"></FileImport>-->
-    <FileImport @customChange = "handleFilesUpload"></FileImport>
+    <!--FileImport @customChange = "handleFilesUpload"></FileImport> -->
     <!--FileImport @customChange = "sendMessage"></FileImport> --->
     <!-- Photo -->
     <!-- Emoji -->
@@ -21,6 +21,7 @@
       />
     </div>
 
+    <FileImport @customChange = "handleFilesUpload"></FileImport>
     <button v-if="message" @click="sendMessage">보내기</button>
   </div>
 </template>
