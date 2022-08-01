@@ -6,16 +6,30 @@
         v-for="message in msg.itemList"
         :key="message.messageId"
       >
-        <p>{{ message.sender.nickname }}</p> 
-        <div style="white-space: pre-wrap">{{ message.message }}</div>
-        
-        <img v-if="message.url && checkType(message.url.toString())" class="file-img" v-bind:src= message.url>
+        <p>{{ message.sender.nickname }}</p>
 
-        <img v-if="message.url && !checkType(message.url.toString())" class="file-file" src= "@/assets/file.png">
-        <a v-if="message.url && !checkType(message.url.toString())" class="file-filename" :href="message.url"> {{message.url}} </a>
+        <div style="white-space: pre-wrap">{{ message.message }}</div>
+
+        <img
+          v-if="message.url && checkType(message.url.toString())"
+          class="file-img"
+          v-bind:src="message.url"
+        />
+
+        <img
+          v-if="message.url && !checkType(message.url.toString())"
+          class="file-file"
+          src="@/assets/file.png"
+        />
+        <a
+          v-if="message.url && !checkType(message.url.toString())"
+          class="file-filename"
+          :href="message.url"
+        >
+          {{ message.url }}
+        </a>
 
         <p>{{ convertDate(message.createdAt) }}</p>
-
       </li>
     </ul>
   </div>
@@ -26,12 +40,8 @@
 -->
 <script>
 import { format } from "date-fns";
-import InfiniteLoading from "vue-infinite-loading";
 
 export default {
-  components: {
-    InfiniteLoading,
-  },
   name: "MessageLog",
   data() {
     return {
@@ -41,7 +51,12 @@ export default {
   },
 
   inject: ["msg"],
-
+  props: {
+    sortDirection: {
+      type: String,
+      default: "top",
+    },
+  },
   methods: {
     convertDate(date) {
       return format(date, "yyyy-MM-dd HH:mm");
@@ -50,12 +65,16 @@ export default {
     // if true, then image
     // if false, then document
     checkType(fileUrl) {
-      if (fileUrl.includes('jpeg') || fileUrl.includes('png') || fileUrl.includes('jpg')) {
+      if (
+        fileUrl.includes("jpeg") ||
+        fileUrl.includes("png") ||
+        fileUrl.includes("jpg")
+      ) {
         return true;
       } else {
         return false;
       }
-    }
+    },
   },
   provide() {
     return {
@@ -67,21 +86,20 @@ export default {
 </script>
 
 <style scoped>
-  .file-img {
-    width: 150px;
-  }
+.file-img {
+  width: 150px;
+}
 
+.file-file {
+  width: 30px;
+}
 
-  .file-file{
-    width: 30px;
-  }
+.file-filename {
+  font-size: 15px;
+}
 
-  .file-filename {
-    font-size: 15px;
-  }
-
-  .chat-item {
-  width: 300px;
+.chat-item {
+  width: 250px;
   padding: 20px;
   margin-bottom: 20px;
   border-radius: 15px;
@@ -89,5 +107,4 @@ export default {
   background-color: gray;
   color: white;
 }
-
 </style>

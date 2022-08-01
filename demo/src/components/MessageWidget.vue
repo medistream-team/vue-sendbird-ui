@@ -2,11 +2,23 @@
   <div class="chat-container">
     <!-- <header-bar></header-bar> -->
     <message-header></message-header>
-     <!--file-import @fileSelect="addInputFile"></file-import> -->
-     <message-input @addInputMessage="addInputMessage" 
-                    @addInputFile="addInputFile">
-     </message-input> 
-    <message-log v-model="messages"></message-log>
+
+    <!--file-import @fileSelect="addInputFile"></file-import> -->
+    <message-input
+      v-if="sortDirection === 'top'"
+      @addInputMessage="addInputMessage"
+      @addInputFile="addInputFile"
+    >
+    </message-input>
+    <message-log
+      v-model="messages"
+      :sort-direction="sortDirection"
+    ></message-log>
+    <message-input
+      v-if="sortDirection === 'bottom'"
+      @addInputMessage="addInputMessage"
+      @addInputFile="addInputFile"
+    ></message-input>
   </div>
 </template>
 
@@ -16,9 +28,8 @@ import MessageInput from "@/components/MessageInput";
 import MessageLog from "@/components/MessageLog";
 import MessageHeader from "./MessageHeader.vue";
 import { computed } from "vue";
-import { SendbirdAction } from '@/sendbird/SendbirdAction'
-import { SendBirdEvent } from '@/sendbird/SendbirdEvent'
-
+import { SendbirdAction } from "@/sendbird/SendbirdAction";
+import { SendBirdEvent } from "@/sendbird/SendbirdEvent";
 
 export default {
   name: "MessageWidget",
@@ -27,12 +38,12 @@ export default {
     MessageInput,
     MessageLog,
     MessageHeader,
-},
+  },
   props: {
-     sortDirection: {
-       type: String,
-       default: 'top'
-     }
+    sortDirection: {
+      type: String,
+      default: "top",
+    },
   },
   provide() {
     return {
@@ -44,7 +55,6 @@ export default {
 
   data() {
     return {
-      // toggleValue: false,
       messages: {
         hasMoreMessage: false,
         itemList: [],
@@ -53,31 +63,32 @@ export default {
     };
   },
 
-   watch: {
+  watch: {
     sortDirection: {
       immediate: true,
       handler: function (value) {
-        console.log("메시지 정렬 방향: " + value);
+        if (value !== "top") {
+          this.messages.itemList.reverse();
+        } else {
+          this.messages.itemList.reverse();
+        }
       },
     },
   },
   methods: {
     addInputMessage: function (message) {
       this.messages.itemList = [message].concat(this.messages.itemList);
-
     },
 
-
     addInputFile: function (file) {
-      console.log("hi", file.url)
+      console.log("hi", file.url);
       this.messages.itemList = [file].concat(this.messages.itemList);
-    }, 
+    },
 
     scroll() {
       const sendbirdAction = SendbirdAction.getInstance();
       sendbirdAction.getMessageList(this.loadMessage);
     },
-
   },
 
   async created() {

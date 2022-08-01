@@ -1,19 +1,14 @@
 <template>
   <div id="app">
     <div class="about">
-      
-      <button type="button" @click="toggleSortDirection()">
+      <button type="button" @click="toggleSortDirection">
         방향 토글하기 인 ({{ sortDirection }})
       </button>
 
-      <img alt="Vue logo" src="@/assets/logo.png">
-      
-
+      <img alt="Vue logo" src="@/assets/logo.png" />
     </div>
     <div class="preview">
-      <message-widget
-        :sort-direction="sortDirection"
-      ></message-widget>
+      <message-widget :sort-direction="sortDirection"></message-widget>
     </div>
   </div>
 </template>
@@ -24,9 +19,9 @@ import MessageWidget from "./components/MessageWidget.vue";
 export default {
   name: "App",
   components: {
-    MessageWidget
+    MessageWidget,
   },
-   data() {
+  data() {
     return {
       sortDirection: "top",
     };
@@ -36,7 +31,7 @@ export default {
       this.sortDirection = this.sortDirection === "top" ? "bottom" : "top";
     },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -56,7 +51,7 @@ export default {
   position: fixed;
   top: 50%;
   left: 75%;
-  width: 375px;
+  width: 600px;
   height: 667px;
   background-color: #f5f5f5;
   text-align: center;

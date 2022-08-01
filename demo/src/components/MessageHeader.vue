@@ -3,7 +3,12 @@
     <p>🕳user</p>
     <div class="glass-container">
       <i class="ii ii-search" @click="modalClick"></i>
-      <input type="text" v-model="filteringText" v-if="modal" />
+      <input
+        class="search"
+        type="text"
+        v-model="filteringText"
+        v-bind:class="search"
+      />
     </div>
 
     <p>{{ filteringText }}</p>
@@ -18,10 +23,12 @@
 import "inticons/fonts/inticons.bundle.min.css";
 
 export default {
+  components: {},
   data() {
     return {
       filteringText: "",
       test: "",
+      search: "searchoff",
       modal: true,
     };
   },
@@ -43,9 +50,17 @@ export default {
   //       console.log(this.filteringNumber);
   //메세지 내용 itemList.message에서 filtering
   //ref?? 요소에 직접적으로 적어야함
+  // this.search = "search-on" ? "search-off" : "search-on";
+  //
   methods: {
     modalClick() {
-      this.modal = !this.modal;
+      if (this.modal) {
+        this.search = "searchon";
+        this.modal = !this.modal;
+      } else {
+        this.search = "searchoff";
+        this.modal = !this.modal;
+      }
     },
   },
   computed: {},
@@ -59,15 +74,34 @@ export default {
   justify-content: space-between;
   height: 50px;
   background-color: coral;
-  position: relative;
 }
 .header-container p {
   margin-left: 20px;
 }
+.glass-container {
+  position: relative;
+  display: flex;
+  min-width: 200px;
+}
+.glass-container input {
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  z-index: 1;
+}
 .glass-container i {
   position: absolute;
-  left: 100px;
-  bottom: 15px;
+  left: 10px;
+  top: 50%;
+  margin-top: -8px;
   cursor: pointer;
+  z-index: 2;
+}
+.searchoff {
+  width: 0;
+  opacity: 0;
+}
+.searchon {
+  width: 100%;
+  opacity: 1;
 }
 </style>

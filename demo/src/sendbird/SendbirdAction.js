@@ -17,7 +17,7 @@ class SendbirdAction {
   async init() {
     let error = null;
     try {
-      await this.connect('admin', '김인태')
+      await this.connect("admin", "김인태");
       this.channel = await this.getChannel(
         "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed"
       );
@@ -94,37 +94,16 @@ class SendbirdAction {
   }
 
   sendFileMessage(file) {
-
     //const fileMessageParams = new this.sb.FileMessageParams();
     //fileMessageParams.file = file;
-    return new Promise((resolve, reject) => { 
-      this.channel.sendFileMessage(file, (userFile, error) => {
-      error ? reject(error) : resolve(userFile)
-    })
-  })
-}
-
-/*
-  getMessageList() {
     return new Promise((resolve, reject) => {
-      if (
-        this.previousMessageQuery.hasMore &&
-        !this.previousMessageQuery.isLoading
-      ) {
-        const params = new this.sb.MessageListParams();
-        //scroll을 내릴 때 마다 증가시킨다?
-        params.prevResultSize = loadMessage;
-        this.channel.getMessagesByTimestamp(
-          Date.now(),
-          params,
-          (messages, error) => {
-            console.log(messages);
-            const response = {
-              hasMoreMessage: this.previousMessageQuery.hasMore,
-              itemList: messages,
-            };
-            error ? reject(error) : resolve(response);
-          }
+      this.channel.sendFileMessage(file, (userFile, error) => {
+        error ? reject(error) : resolve(userFile);
+      });
+    });
+  }
+
+  /*
         );
 
         this.previousMessageQuery.load(10, (messageList, error) => {
@@ -149,7 +128,7 @@ class SendbirdAction {
       ) {
         const params = new this.sb.MessageListParams();
         //scroll을 내릴 때 마다 증가시킨다?
-        params.prevResultSize = 20;
+        params.prevResultSize = 5;
         this.channel.getMessagesByTimestamp(
           Date.now(),
           params,
@@ -167,7 +146,6 @@ class SendbirdAction {
       }
     });
   }
-
 
   static getInstance() {
     return new SendbirdAction();
