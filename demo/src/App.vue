@@ -41,6 +41,7 @@ export default {
 
   data() {
     return {
+      userId: "user1",
       sortDirection: "top",
       userId1: "user1",
       userId2: "user2",
