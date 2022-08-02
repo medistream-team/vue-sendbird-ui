@@ -9,6 +9,7 @@
       v-on:init="handleFilePondInit"
     >
     </file-pond>
+    <button>send</button>
   </div>
 </template>
 

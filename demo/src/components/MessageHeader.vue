@@ -48,10 +48,7 @@ export default {
   //       );
   //       console.log(chat.innerText);
   //       console.log(this.filteringNumber);
-  //메세지 내용 itemList.message에서 filtering
-  //ref?? 요소에 직접적으로 적어야함
-  // this.search = "search-on" ? "search-off" : "search-on";
-  //
+
   methods: {
     modalClick() {
       if (this.modal) {

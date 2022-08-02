@@ -7,6 +7,12 @@
         :key="message.messageId"
       >
         <p>{{ message.sender.nickname }}</p>
+        <!--nickname이 다르면 ? (내 닉네임은 오른쪽 다르면 왼쪽 색깔도 다르게해보자
+        어떤 것과 비교할껀가요? userId? 같지않았을 떄 다른 class를 주자!
+        버튼도 컴포넌트로 만들어서 사진이 올라왔을 때 사진전송으로 바뀌는 버튼을 만들면 어떨까?
+        링크처럼 만드는게 어떨까? user toggle, channel id toggle
+        검색하는 sendbird function 을 찾아보고 모르면 질문하기.
+        )-->
 
         <div style="white-space: pre-wrap">{{ message.message }}</div>
 
@@ -44,10 +50,7 @@ import { format } from "date-fns";
 export default {
   name: "MessageLog",
   data() {
-    return {
-      page: 1,
-      limit: 0,
-    };
+    return {};
   },
 
   inject: ["msg"],
@@ -81,7 +84,6 @@ export default {
       title: "김인태",
     };
   },
-  computed: {},
 };
 </script>
 
