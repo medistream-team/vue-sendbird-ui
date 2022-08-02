@@ -1,7 +1,10 @@
-<template>
+<template> 
   <div class="file-import">
-    <file-pond
+
+  
+  <file-pond
       name="files"
+      ref="fileref"
       credits=""
       label-idle="<span class='filepond--label-action'>file</span>"
       accepted-file-types="image/jpeg, image/png, application/pdf, application/docx"
@@ -9,10 +12,13 @@
       server= "http://localhost:3000/upload"
       v-bind:file = "fileList"
       v-on:init="handleFilePondInit"
+      v-on:processfiles = "emitThis"
       >
     </file-pond>
+ 
 
-    <button @click="emitThis"> sendFile </button> 
+
+    <!--button @click="emitThis"> sendFile </button>  -->
 
 
 
@@ -105,12 +111,14 @@ export default {
 
     emitThis: function () {
       this.$emit("customChange", this.fileList);
-    }
+      this.$refs.fileref.removeFile();
+    },
     
   },
 };
 </script>
 
 <style scoped>
+
 
 </style>

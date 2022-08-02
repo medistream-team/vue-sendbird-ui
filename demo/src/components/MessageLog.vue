@@ -1,4 +1,5 @@
 <template>
+          
   <div class="message-log">
     <ul v-if="msg.itemList.length > 0">
       <li

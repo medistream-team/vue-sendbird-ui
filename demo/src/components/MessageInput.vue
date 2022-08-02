@@ -1,9 +1,11 @@
 <template>
   <div class="input-container">
     <div class="file-send">
-      <div class="file-send-button">
-        <i class="ii ii-attachment"></i>
-      </div>
+      <button class="file-send-button" @click="trigger">
+        <i class="ii ii-attachment">
+          
+        </i>
+      </button>
 
 <!-- File Upload -->
     <!-- <file-import></file-import> -->
@@ -21,7 +23,7 @@
       />
     </div>
 
-    <FileImport @customChange = "handleFilesUpload"></FileImport>
+    <FileImport @customChange = "handleFilesUpload" ref="fileSelect"></FileImport>
     <button v-if="message" @click="sendMessage">보내기</button>
   </div>
 </template>
@@ -32,6 +34,7 @@
 <script>
 import { SendbirdAction } from '@/sendbird/SendbirdAction'
 import FileImport from './FileImport.vue';
+
 
 export default {
     name: "MessageInput",
@@ -57,7 +60,7 @@ export default {
         },
 
      handleFilesUpload: function (event) {
-      this.file=event;
+      this.file = event;
       console.log(event);
       SendbirdAction.getInstance()
         .sendFileMessage(this.file)
@@ -66,14 +69,11 @@ export default {
         })
     },
 
+      trigger: function () {
+        this.$refs.fileSelect.browse();
+        console.log("hi!")
+      },   
 
-/*
-    printthis: function (event) {
-      console.log("thisshouldbePrinted", event);
-      this.file = event;
-      console.log("filenamenowis:", this.file)
-    },
-*/
     }
 };
 
@@ -103,6 +103,7 @@ export default {
   border: 1px solid#E6E6E6;
   background-color: white;
   width: 50px;
+  cursor: pointer;
 }
 
 .file-send-button:hover {
