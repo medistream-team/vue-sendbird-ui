@@ -1,9 +1,9 @@
 <template>
   <div class="input-container">
     <div class="file-send">
-      <div class="file-send-button">
-        <i class="ii ii-attachment"></i>
-      </div>
+      <button class="file-send-button" @click="trigger">
+        <i class="ii ii-attachment"> </i>
+      </button>
 
       <!-- File Upload -->
       <!-- <file-import></file-import> -->
@@ -21,7 +21,7 @@
       />
     </div>
 
-    <FileImport @customChange="handleFilesUpload"></FileImport>
+    <FileImport @customChange="handleFilesUpload" ref="fileSelect"></FileImport>
     <button v-if="message" @click="sendMessage">보내기</button>
   </div>
 </template>
@@ -63,14 +63,10 @@ export default {
         });
     },
 
-    //
-    /*
-    printthis: function (event) {
-      console.log("thisshouldbePrinted", event);
-      this.file = event;
-      console.log("filenamenowis:", this.file)
+    trigger: function () {
+      this.$refs.fileSelect.browse();
+      console.log("hi!");
     },
-*/
   },
 };
 </script>
@@ -96,6 +92,7 @@ export default {
   border: 1px solid#E6E6E6;
   background-color: white;
   width: 50px;
+  cursor: pointer;
 }
 
 .file-send-button:hover {

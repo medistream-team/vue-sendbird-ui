@@ -2,14 +2,17 @@
   <div class="file-import">
     <file-pond
       name="files"
+      ref="fileref"
       credits=""
       label-idle="드래그 앤 드롭 or <span class='filepond--label-action'>파일찾기</span>"
       accepted-file-types="image/jpeg, image/png"
       :allow-multiple="true"
       v-on:init="handleFilePondInit"
+      v-on:processfiles="emitThis"
     >
     </file-pond>
-    <button>send</button>
+
+    <!--button @click="emitThis"> sendFile </button>  -->
   </div>
 </template>
 
@@ -57,6 +60,13 @@ export default {
     handleFilePondInit: function () {
       console.log("FilePond has initialized");
     },
+
+    emitThis: function () {
+      this.$emit("customChange", this.fileList);
+      this.$refs.fileref.removeFile();
+    },
   },
 };
 </script>
+
+<style scoped></style>

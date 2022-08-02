@@ -32,6 +32,7 @@
 import MessageInput from "@/components/MessageInput";
 import MessageLog from "@/components/MessageLog";
 import MessageHeader from "./MessageHeader.vue";
+
 import { computed } from "vue";
 import { SendbirdAction } from "@/sendbird/SendbirdAction";
 import { SendBirdEvent } from "@/sendbird/SendbirdEvent";
@@ -39,7 +40,7 @@ import { SendBirdEvent } from "@/sendbird/SendbirdEvent";
 export default {
   name: "MessageWidget",
   components: {
-    //FileImport,
+
     MessageInput,
     MessageLog,
     MessageHeader,
