@@ -1,30 +1,32 @@
 <template>
   <div id="app">
     <div class="about">
-      
-      <button type="button" @click="toggleSortDirection()">
+      <button type="button" @click="toggleSortDirection">
         방향 토글하기 인 ({{ sortDirection }})
       </button>
+      <div>
+        <button class="toggle_user1" @click="toggleUser1">
+          toggle {{ userId1 }}
+        </button>
+        <button class="toggle_user2" @click="toggleUser2">
+          toggle {{ userId2 }}</button
+        ><button class="toggle_channel" @click="toggleChannel">
+          toggle channel
+        </button>
 
-      <br>
-
-      <button type="button" @click="userId = 'user1'">
-        사용자 user1
-      </button>
-      <button type="button" @click="userId = 'user2'">
-        사용자 user2
-      </button>
-
-      <!-- <img alt="Vue logo" src="@/assets/logo.png"> -->
-
+        <p>
+          {{ channel }}
+        </p>
+      </div>
     </div>
-    <div class="preview">
-      <message-widget
-        channel-id="sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed"
-        :user-id="userId"
-        :sort-direction="sortDirection"
-      ></message-widget>
-    </div>
+
+    <message-widget
+      class="preview"
+      :userId1="userId1"
+      :userId2="userId2"
+      :channel="channel"
+      :sort-direction="sortDirection"
+    ></message-widget>
   </div>
 </template>
 
@@ -34,20 +36,40 @@ import MessageWidget from "./components/MessageWidget.vue";
 export default {
   name: "App",
   components: {
-    MessageWidget
+    MessageWidget,
   },
-   data() {
+
+  data() {
     return {
-      userId: 'user1',
+      userId: "user1",
       sortDirection: "top",
+      userId1: "user1",
+      userId2: "user2",
+      //userId를 배열로 만들 수 있는 방법이 없을까?
+      channel:
+        "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed",
     };
   },
+
   methods: {
     toggleSortDirection: function () {
       this.sortDirection = this.sortDirection === "top" ? "bottom" : "top";
     },
+    toggleUser1() {
+      this.userId1 = this.userId1 === "user1" ? "김인태" : "user1";
+    },
+    toggleUser2() {
+      this.userId2 = this.userId2 === "user2" ? "김인태" : "user2";
+    },
+    toggleChannel() {
+      this.channel =
+        this.channel ===
+        "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed"
+          ? "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
+          : "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed";
+    },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -55,6 +77,7 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 10000px;
 }
 .about {
   width: 50%;
@@ -67,8 +90,8 @@ export default {
   position: fixed;
   top: 50%;
   left: 75%;
-  width: 375px;
-  height: 667px;
+  width: 600px;
+  height: 800px;
   background-color: #f5f5f5;
   text-align: center;
   transform: translate(-50%, -50%);
