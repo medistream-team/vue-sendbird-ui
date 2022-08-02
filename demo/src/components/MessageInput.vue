@@ -2,19 +2,17 @@
   <div class="input-container">
     <div class="file-send">
       <button class="file-send-button" @click="trigger">
-        <i class="ii ii-attachment">
-          
-        </i>
+        <i class="ii ii-attachment"> </i>
       </button>
 
-<!-- File Upload -->
-    <!-- <file-import></file-import> -->
-    <!--<FileImport @customChange = "printthis"></FileImport>-->
-    <!--FileImport @customChange = "handleFilesUpload"></FileImport> -->
-    <!--FileImport @customChange = "sendMessage"></FileImport> --->
-    <!-- Photo -->
-    <!-- Emoji -->
-    
+      <!-- File Upload -->
+      <!-- <file-import></file-import> -->
+      <!--<FileImport @customChange = "printthis"></FileImport>-->
+      <!--FileImport @customChange = "handleFilesUpload"></FileImport> -->
+      <!--FileImport @customChange = "sendMessage"></FileImport> --->
+      <!-- Photo -->
+      <!-- Emoji -->
+
       <textarea
         class="text-input"
         placeholder="새로운 메시지를 입력하세요..."
@@ -23,66 +21,57 @@
       />
     </div>
 
-    <FileImport @customChange = "handleFilesUpload" ref="fileSelect"></FileImport>
+    <FileImport @customChange="handleFilesUpload" ref="fileSelect"></FileImport>
     <button v-if="message" @click="sendMessage">보내기</button>
   </div>
 </template>
 
-
-
-
 <script>
-import { SendbirdAction } from '@/sendbird/SendbirdAction'
-import FileImport from './FileImport.vue';
-
+import { SendbirdAction } from "@/sendbird/SendbirdAction";
+import FileImport from "./FileImport.vue";
 
 export default {
-    name: "MessageInput",
-    components: { FileImport },
-    data() {
-        return {
-            message: "",
-            file: "",
-        };
+  name: "MessageInput",
+  components: { FileImport },
+  data() {
+    return {
+      message: "",
+      file: "",
+    };
+  },
+
+  methods: {
+    sendMessage: function (event) {
+      if (event.isComposing) {
+        return;
+      }
+      SendbirdAction.getInstance()
+        .sendUserMessage(this.message)
+        .then((message) => {
+          this.$emit("addInputMessage", message);
+          this.message = "";
+        });
     },
 
-    methods: {
-        sendMessage: function (event) {
-            if (event.isComposing) {
-                return;
-            }
-            SendbirdAction.getInstance()
-                .sendUserMessage(this.message)
-                .then((message) => {
-                this.$emit("addInputMessage", message);
-                this.message = "";
-            });
-        },
-
-     handleFilesUpload: function (event) {
+    handleFilesUpload: function (event) {
       this.file = event;
       console.log(event);
       SendbirdAction.getInstance()
         .sendFileMessage(this.file)
         .then((file) => {
           this.$emit("addInputFile", file);
-        })
+        });
     },
 
-      trigger: function () {
-        this.$refs.fileSelect.browse();
-        console.log("hi!")
-      },   
-
-    }
+    trigger: function () {
+      this.$refs.fileSelect.browse();
+      console.log("hi!");
+    },
+  },
 };
-
 </script>
 
 <style scoped>
-
-
-
 .text-input {
   width: 100%;
 }
@@ -109,6 +98,4 @@ export default {
 .file-send-button:hover {
   background-color: #e2e2e2;
 }
-
-
 </style>
