@@ -22,6 +22,11 @@
     </div>
 
     <FileImport @customChange="handleFilesUpload" ref="fileSelect"></FileImport>
+    <input
+      v-show="ghostFileInputVisible"
+      type="file"
+      class="ghost-file-input"
+      @input="handleNativeFileInput">
     <button v-if="message" @click="sendMessage">보내기</button>
   </div>
 </template>
@@ -37,9 +42,15 @@ export default {
     return {
       message: "",
       file: "",
+      ghostFileInputVisible: true,
     };
   },
-
+  // mounted() {
+  //   document.querySelectorAll('.chat-container')[0].addEventListener('mousedown', this.handleMouseDown);
+  // },
+  // unmounted() {
+  //   document.querySelectorAll('.chat-container')[0].removeEventListener('mousedown', this.handleMouseDown);
+  // },
   methods: {
     sendMessage: function (event) {
       if (event.isComposing) {
@@ -52,7 +63,15 @@ export default {
           this.message = "";
         });
     },
-
+    // handleMouseDown: function () {
+    //   document.querySelectorAll('.chat-container')[0].addEventListener('mouseenter', this.handleMouseMove);
+    // },
+    // handleMouseMove: function (event) {
+    //   console.log(event);
+    // },
+    handleNativeFileInput: function (event) {
+      console.log(event);
+    },
     handleFilesUpload: function (event) {
       this.file = event;
       console.log(event);
@@ -92,6 +111,16 @@ export default {
   background-color: white;
   width: 50px;
   cursor: pointer;
+}
+.ghost-file-input {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(255, 0, 0, 0.1);
+  text-indent: -9999px;
+  /* pointer-events: none; */
 }
 
 .file-send-button:hover {
