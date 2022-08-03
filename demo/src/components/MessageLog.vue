@@ -43,7 +43,8 @@
  const chat = document.querySelector(
         ".chat-container li:nth-child(4) div"
       );
-      console.log(chat.innerText);
+  nickname 과 message.nickname이 같을 때 list에 class를 준다
+  어떻게 줄것? 
 -->
 <script>
 import { format } from "date-fns";

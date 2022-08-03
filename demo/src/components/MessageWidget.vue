@@ -1,7 +1,7 @@
 <template>
   <div class="chat-container" @scroll="handleScroll">
     <!-- <header-bar></header-bar> -->
-
+    <button @click="convert"></button>
     <message-header></message-header>
 
     <!--file-import @fileSelect="addInputFile"></file-import> -->
@@ -14,6 +14,7 @@
     </message-input>
     <message-log
       v-model="messages"
+      :userId="userId"
       :classValue="classValue"
       :sort-direction="sortDirection"
     ></message-log>
@@ -143,6 +144,7 @@ export default {
     },
   },
   methods: {
+    convert() {},
     addInputMessage: function (message) {
       this.messages.itemList = [message].concat(this.messages.itemList);
     },
