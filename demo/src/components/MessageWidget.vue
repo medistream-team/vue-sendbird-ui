@@ -18,6 +18,12 @@
       :classValue="classValue"
       :sort-direction="sortDirection"
     ></message-log>
+    <infinite-loading
+      v-if="showInfiniteLoadingIndicator"
+      :force-use-infinite-wrapper="true"
+      direction="top"
+      @infinite="infiniteHandler">
+    </infinite-loading>
     <message-input
       v-if="sortDirection === 'bottom'"
       @addInputMessage="addInputMessage"
@@ -28,6 +34,7 @@
 
 <script>
 //import FileImport from "@/components/FileImport";
+import InfiniteLoading from 'vue-infinite-loading';
 import MessageInput from "@/components/MessageInput";
 import MessageLog from "@/components/MessageLog";
 import MessageHeader from "./MessageHeader.vue";
@@ -38,6 +45,7 @@ import { SendBirdEvent } from "@/sendbird/SendbirdEvent";
 export default {
   name: "MessageWidget",
   components: {
+    InfiniteLoading,
     //FileImport,
     MessageInput,
     MessageLog,
@@ -83,6 +91,7 @@ export default {
 
   data() {
     return {
+      showInfiniteLoadingIndicator: false,
       messages: {
         hasMoreMessage: false,
         itemList: [],
@@ -153,6 +162,10 @@ export default {
       console.log("hi", file.url);
       this.messages.itemList = [file].concat(this.messages.itemList);
     },
+    infiniteHandler: function ($state) {
+      console.log('Triggered');
+      console.log($state);
+    },
     handleScroll() {
       //메시지 리스트를 불러오는 메소드?
       const chat = document.querySelector(".chat-container");
@@ -190,7 +203,14 @@ export default {
       sendbirdAction
         .getMessageList(this.loadMessage)
 
-        .then((response) => (this.messages = response));
+        .then((response) => {
+          this.messages = response;
+          if (this.messages.hasMoreMessage) {
+            setTimeout(() => {
+              this.showInfiniteLoadingIndicator = true;
+            }, 1000);
+          }
+        });
 
       const channelEvent = new SendBirdEvent();
 
