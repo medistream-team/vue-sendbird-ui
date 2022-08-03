@@ -15,10 +15,10 @@ class SendbirdAction {
   }
   //"sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed"
   //"sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
-  async init(userId, channel) {
+  async init(userId, nickname, channel) {
     let error = null;
     try {
-      await this.connect("admin", userId);
+      await this.connect(userId, nickname, channel);
       this.channel = await this.getChannel(channel);
       await this.join();
       this.previousMessageQuery = this.channel.createPreviousMessageListQuery();
@@ -101,23 +101,6 @@ class SendbirdAction {
       });
     });
   }
-
-  /*
-        );
-
-        this.previousMessageQuery.load(10, (messageList, error) => {
-          const response = {
-            hasMoreMessage: this.previousMessageQuery.hasMore,
-            itemList: messageList,
-          };
-          error ? reject(error) : resolve(response);
-        });
-      } else {
-        resolve([]);
-      }
-    });
-  }
-  */
 
   getMessageList(loadMessage) {
     return new Promise((resolve, reject) => {

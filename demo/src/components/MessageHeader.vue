@@ -43,11 +43,6 @@ export default {
         });
     },
   },
-  //  const chat = document.querySelector(
-  //         ".chat-container li:nth-child(2) div"
-  //       );
-  //       console.log(chat.innerText);
-  //       console.log(this.filteringNumber);
 
   methods: {
     modalClick() {

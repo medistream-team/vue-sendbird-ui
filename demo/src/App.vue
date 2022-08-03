@@ -5,11 +5,18 @@
         방향 토글하기 인 ({{ sortDirection }})
       </button>
       <div>
-        <button class="toggle_user1" @click="toggleUser1">
-          toggle {{ userId1 }}
+        <p>userId toggle</p>
+        <button class="toggle_user1" @click="toggleUserId">
+          toggle {{ userId }}
         </button>
-        <button class="toggle_user2" @click="toggleUser2">
-          toggle {{ userId2 }}</button
+      </div>
+      <div>
+        <p>nickname toggle</p>
+        <button class="toggle_user1" @click="toggleNickname1">
+          toggle {{ nickname1 }}
+        </button>
+        <button class="toggle_user2" @click="toggleNickname2">
+          toggle {{ nickname2 }}</button
         ><button class="toggle_channel" @click="toggleChannel">
           toggle channel
         </button>
@@ -22,9 +29,10 @@
 
     <message-widget
       class="preview"
-      :userId1="userId1"
-      :userId2="userId2"
+      :nickname1="nickname1"
+      :nickname2="nickname2"
       :channel="channel"
+      :userId="userId"
       :sort-direction="sortDirection"
     ></message-widget>
   </div>
@@ -41,10 +49,11 @@ export default {
 
   data() {
     return {
-      userId: "user1",
       sortDirection: "top",
-      userId1: "user1",
-      userId2: "user2",
+      nickname1: "user1",
+      nickname2: "user2",
+      userId: "admin",
+
       //userId를 배열로 만들 수 있는 방법이 없을까?
       channel:
         "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed",
@@ -55,11 +64,16 @@ export default {
     toggleSortDirection: function () {
       this.sortDirection = this.sortDirection === "top" ? "bottom" : "top";
     },
-    toggleUser1() {
-      this.userId1 = this.userId1 === "user1" ? "김인태" : "user1";
+    toggleUserId() {
+      this.userId = this.userId === "admin" ? "김인태" : "admin";
     },
-    toggleUser2() {
-      this.userId2 = this.userId2 === "user2" ? "김인태" : "user2";
+    toggleNickname1() {
+      this.nickname1 =
+        this.nickname1 === "nickname1" ? "nickname2" : "nickname1";
+    },
+    toggleNickname2() {
+      this.nickname2 =
+        this.nickname2 === "nickname2" ? "nickname1" : "nickname2";
     },
     toggleChannel() {
       this.channel =
@@ -77,7 +91,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  height: 10000px;
 }
 .about {
   width: 50%;

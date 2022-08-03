@@ -2,9 +2,6 @@
   <div class="chat-container" @scroll="handleScroll">
     <!-- <header-bar></header-bar> -->
 
-    <div>{{ userId1 }}</div>
-    <div>{{ channel }}</div>
-    <button @click="clickcc">{{ loadMessage }}</button>
     <message-header></message-header>
 
     <!--file-import @fileSelect="addInputFile"></file-import> -->
@@ -17,6 +14,7 @@
     </message-input>
     <message-log
       v-model="messages"
+      :classValue="classValue"
       :sort-direction="sortDirection"
     ></message-log>
     <message-input
@@ -49,11 +47,16 @@ export default {
       type: String,
       default: "top",
     },
-    userId1: {
+    userId: {
+      type: String,
+      default: "admin",
+    },
+
+    nickname1: {
       type: String,
       default: "user1",
     },
-    userId2: {
+    nickname2: {
       type: String,
       default: "user2",
     },
@@ -83,13 +86,13 @@ export default {
         hasMoreMessage: false,
         itemList: [],
       },
-      userId: "김인태",
-
+      classValue: true,
       channel1:
         "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed",
       channel2:
         "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c",
       loadMessage: 15,
+      page: 1,
     };
   },
 
@@ -105,33 +108,36 @@ export default {
         }
       },
     },
-    userId1: {
+    nickname1: {
       handler: function (value) {
         const sendbirdAction = SendbirdAction.getInstance();
         if (value !== "user1") {
-          sendbirdAction.init("김인태", this.channel);
+          sendbirdAction.init(this.userId, this.nickname1, this.channel);
         } else {
-          sendbirdAction.init(this.userId1, this.channel);
+          sendbirdAction.init(this.userId, this.nickname1, this.channel);
         }
       },
     },
-    userId2: {
+    nickname2: {
       handler: function (value) {
         const sendbirdAction = SendbirdAction.getInstance();
         if (value !== "user2") {
-          sendbirdAction.init("김인태", this.channel);
+          sendbirdAction.init(this.userId, this.nickname2, this.channel);
         } else {
-          sendbirdAction.init(this.userId2, this.channel);
+          sendbirdAction.init(this.userId, this.nickname2, this.channel);
         }
       },
     },
     channel: {
       handler: function () {
         const sendbirdAction = SendbirdAction.getInstance();
+
         if (this.channel !== this.channel) {
-          sendbirdAction.init(this.userId, this.channel1);
+          sendbirdAction.init(this.userId1, this.channel1);
+          sendbirdAction.getMessageList(this.loadMessage);
         } else {
           sendbirdAction.init(this.userId, this.channel2);
+          sendbirdAction.getMessageList(this.loadMessage);
         }
       },
     },
@@ -146,17 +152,22 @@ export default {
       this.messages.itemList = [file].concat(this.messages.itemList);
     },
     handleScroll() {
-      console.log("d");
-    },
-    clickcc() {
-      this.loadMessage++;
       //메시지 리스트를 불러오는 메소드?
+      const chat = document.querySelector(".chat-container");
+      let scrollHeight = chat.scrollHeight;
+      let scrollTop = chat.scrollTop;
       const sendbirdAction = SendbirdAction.getInstance();
-      sendbirdAction.getMessageList(this.loadMessage);
-      const channelEvent = new SendBirdEvent();
-      channelEvent.onMessageReceived((message) => {
-        this.messages.itemList = [message].concat(this.messages.itemList);
-      });
+      console.log("scrollHeight  ::", scrollHeight);
+      console.log("scrollTop  ::", scrollTop);
+      if (scrollTop + 800 === scrollHeight) {
+        console.log("d");
+        this.loadMessage += 15;
+        sendbirdAction.getMessageList(this.loadMessage);
+        const channelEvent = new SendBirdEvent();
+        channelEvent.onMessageReceived((message) => {
+          this.messages.itemList = [message].concat(this.messages.itemList);
+        });
+      }
     },
   },
   //
@@ -166,7 +177,11 @@ export default {
   },
   async created() {
     const sendbirdAction = SendbirdAction.getInstance();
-    const error = await sendbirdAction.init("김인태", this.channel);
+    const error = await sendbirdAction.init(
+      "김인태",
+      this.nickname1,
+      this.channel
+    );
     // this.msg,,,,,
 
     if (!error) {
