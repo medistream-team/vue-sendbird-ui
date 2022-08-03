@@ -64,8 +64,7 @@ export default {
     },
 
     trigger: function () {
-      this.$refs.fileSelect.browse();
-      console.log("hi!");
+      this.$refs.fileSelect.handleOpenFile();
     },
   },
 };

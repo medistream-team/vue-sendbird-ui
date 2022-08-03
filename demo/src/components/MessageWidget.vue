@@ -8,10 +8,9 @@
     <message-header></message-header>
 
     <!--file-import @fileSelect="addInputFile"></file-import> -->
-    <message-input
-      v-if="sortDirection === 'top'"
-      @addInputMessage="addInputMessage"
-      @addInputFile="addInputFile"
+    <message-input @addInputMessage="addInputMessage"
+                   @addInputFile="addInputFile"
+                   v-if="sortDirection === 'top'"
     >
       <!-- channel Id가 없을 때 페이지를 만들어보자!-->
     </message-input>
@@ -19,10 +18,9 @@
       v-model="messages"
       :sort-direction="sortDirection"
     ></message-log>
-    <message-input
-      v-if="sortDirection === 'bottom'"
-      @addInputMessage="addInputMessage"
-      @addInputFile="addInputFile"
+    <message-input @addInputMessage="addInputMessage"
+                   @addInputFile="addInputFile"
+                   v-if="sortDirection === 'bottom'"
     ></message-input>
   </div>
 </template>
@@ -73,7 +71,7 @@ export default {
   provide() {
     return {
       msg: computed(() => {
-        return this.messages; // 콜백 함수 형태로 return
+        return this.messages // 콜백 함수 형태로 return
       }),
     };
   },

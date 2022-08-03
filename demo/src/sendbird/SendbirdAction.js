@@ -18,7 +18,7 @@ class SendbirdAction {
   async init(userId, channel) {
     let error = null;
     try {
-      await this.connect("admin", userId);
+      await this.connect("bomi", userId);
       this.channel = await this.getChannel(channel);
       await this.join();
       this.previousMessageQuery = this.channel.createPreviousMessageListQuery();
