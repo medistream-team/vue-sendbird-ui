@@ -22,11 +22,12 @@
     </div>
 
     <FileImport @customChange="handleFilesUpload" ref="fileSelect"></FileImport>
-    <input
+    <!--input
       v-show="ghostFileInputVisible"
       type="file"
       class="ghost-file-input"
-      @input="handleNativeFileInput">
+      @input="handleNativeFileInput"-->
+
     <button v-if="message" @click="sendMessage">보내기</button>
   </div>
 </template>
@@ -69,9 +70,10 @@ export default {
     // handleMouseMove: function (event) {
     //   console.log(event);
     // },
-    handleNativeFileInput: function (event) {
-      console.log(event);
-    },
+
+    //handleNativeFileInput: function (event) {
+    //  console.log(event);
+    //},
     handleFilesUpload: function (event) {
       this.file = event;
       console.log(event);
@@ -112,6 +114,7 @@ export default {
   width: 50px;
   cursor: pointer;
 }
+
 .ghost-file-input {
   position: fixed;
   top: 0;
