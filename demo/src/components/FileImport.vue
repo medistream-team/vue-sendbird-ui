@@ -1,5 +1,4 @@
 <template>
-<div>
   <div class="file-import">
      <file-pond
       name="files"
@@ -18,24 +17,6 @@
     </file-pond>
 
     <!--button @click="emitThis"> sendFile </button>  -->
-  </div>
-  <div class="file-drag">
-    <file-pond
-      name="files"
-      ref="filedrag"
-      credits=""
-      label-idle="<span class='filepond--label-action'></span>"
-      accepted-file-types="image/jpeg, image/png, application/pdf, application/docx"
-      :allow-multiple="true"
-      :allowBrowse="false"
-      :allowDrop="true"
-      server= "http://localhost:3000/upload"
-      v-bind:file = "fileList"
-      v-on:init="handleFilePondInit"
-      v-on:processfiles = "emitThis"
-      >
-      </file-pond>
-    </div>
   </div>
 </template>
 
@@ -103,12 +84,18 @@ export default {
 </script>
 
 
-<style scoped>
-.file-import {
-  display: none;
+<style>
+.filepond--root {
+  position: relative;
 }
 
+.filepond--drop-label {
+  background-color: #F5F5F5;
+}
 
+.filepond--root .filepond--drop-label {
+  min-height: 1em;
+}
 
 
 </style>

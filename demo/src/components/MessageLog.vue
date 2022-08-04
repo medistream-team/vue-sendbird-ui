@@ -87,6 +87,7 @@ export default {
 }
 
 .chat-item {
+  position: relative;
   width: 250px;
   padding: 20px;
   margin-bottom: 20px;
