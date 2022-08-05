@@ -30,12 +30,6 @@
         {{ item.created_at }}
         <!-- Hacker News item loop -->
       </div>
-      <infinite-loading
-        :force-use-infinite-wrapper="true"
-        direction="top"
-        @infinite="infiniteHandler"
-      >
-      </infinite-loading>
     </div>
 
     <message-widget
@@ -50,13 +44,10 @@
 
 <script>
 import MessageWidget from "./components/MessageWidget.vue";
-import InfiniteLoading from "vue-infinite-loading";
-import axios from "axios";
 
 export default {
   name: "App",
   components: {
-    InfiniteLoading,
     MessageWidget,
   },
 
@@ -91,23 +82,6 @@ export default {
         "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed"
           ? "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
           : "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed";
-    },
-    infiniteHandler($state) {
-      axios
-        .get("//hn.algolia.com/api/v1/search_by_date?tags=story", {
-          params: {
-            page: this.page,
-          },
-        })
-        .then(({ data }) => {
-          if (data.hits.length) {
-            this.page += 1;
-            this.list.push(...data.hits);
-            $state.loaded();
-          } else {
-            $state.complete();
-          }
-        });
     },
   },
 };

@@ -32,17 +32,16 @@ export default {
       modal: true,
     };
   },
-  inject: ["msg"],
 
-  filters: {
-    messageFilter() {
-      return this.msg.itemList
-        .map((message) => message.message)
-        .filter((num) => {
-          return num.toLowerCase().includes(this.filteringText.toLowerCase());
-        });
-    },
-  },
+  // filters: {
+  //   messageFilter() {
+  //     return this.msg.itemList
+  //       .map((message) => message.message)
+  //       .filter((num) => {
+  //         return num.toLowerCase().includes(this.filteringText.toLowerCase());
+  //       });
+  //   },
+  // },
 
   methods: {
     modalClick() {

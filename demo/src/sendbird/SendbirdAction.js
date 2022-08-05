@@ -104,6 +104,13 @@ class SendbirdAction {
   }
 
   //인피니티 scroll이 제일 마지막에 실행되어야함.
+  // this.previousMessageQuery.load(loadMessage, (messageList, error) => {
+  //   const response = {
+  //     hasMoreMessage: this.previousMessageQuery.hasMore,
+  //     itemList: messageList,
+  //   };
+  //   error ? reject(error) : resolve(response);
+  // });
   getMessageList(loadMessage) {
     return new Promise((resolve, reject) => {
       if (
@@ -111,23 +118,16 @@ class SendbirdAction {
         !this.previousMessageQuery.isLoading
       ) {
         const params = new this.sb.MessageListParams();
-        console.log("getMessageList");
-        //scroll을 내릴 때 마다 증가시킨다?
-        //날짜 단위로 가져오기? 연구 해보자 new Date를 하나씩 빼면서?
-        //하루 기준으로 해서 그 다음날의 timestamp를 계속 갖고오기.
-        // 그러면 getMessageList를 scroll 했을 때 y좌표가 어느정도까지 내려왔을 때 호출 할까?
-
         params.prevResultSize = loadMessage;
         this.channel.getMessagesByTimestamp(
           Date.now(),
           params,
           (messages, error) => {
-            console.log(messages);
-            const response = {
-              hasMoreMessage: this.previousMessageQuery.hasMore,
-              itemList: messages,
-            };
-            error ? reject(error) : resolve(response);
+            console.log(messages, "sendbirdAction");
+            const response = messages;
+            error
+              ? reject(error)
+              : resolve(response, console.log(response, "respon"));
           }
         );
       } else {

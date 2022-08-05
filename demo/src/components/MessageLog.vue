@@ -1,12 +1,9 @@
 <template>
   <div class="message-log">
-    <fallback-message
-      v-if="msg === null || msg === undefined"
-    ></fallback-message>
-    <div v-if="msg.itemList.length > 0">
+    <div v-if="messages.length > 0">
       <div
         v-bind:class="[classValue ? 'chat-item me' : 'chat-item stranger']"
-        v-for="message in msg.itemList"
+        v-for="message in messages"
         :key="message.messageId"
       >
         <p>{{ message.sender.nickname }}</p>
@@ -34,11 +31,7 @@
 
         <p>{{ convertDate(message.createdAt) }}</p>
       </div>
-      <infinite-loading
-        :force-use-infinite-wrapper="true"
-        @infinite="infiniteHandler"
-      >
-      </infinite-loading>
+      <infinite-loading @infinite="infiniteHandler"> </infinite-loading>
     </div>
   </div>
 </template>
@@ -53,17 +46,15 @@
 -->
 <script>
 import { format } from "date-fns";
-import FallbackMessage from "./FallbackMessage.vue";
 import InfiniteLoading from "vue-infinite-loading";
-
+import { SendbirdAction } from "@/sendbird/SendbirdAction";
+import { SendBirdEvent } from "@/sendbird/SendbirdEvent";
 export default {
   components: {
-    FallbackMessage,
     InfiniteLoading,
   },
   name: "MessageLog",
 
-  inject: ["msg"],
   props: {
     sortDirection: {
       type: String,
@@ -77,6 +68,15 @@ export default {
       type: String,
       default: "admin",
     },
+    loadMessage: {
+      type: Number,
+      default: 10,
+    },
+  },
+  data() {
+    return {
+      messages: [],
+    };
   },
   methods: {
     convertDate(date) {
@@ -93,17 +93,53 @@ export default {
         return false;
       }
     },
+
     infiniteHandler($state) {
-      console.log(121212121);
-      $state.loaded();
+      const sendbirdAction = SendbirdAction.getInstance();
+      setTimeout(() => {
+        sendbirdAction
+          .getMessageList(this.loadMessage)
+          .then((res) => {
+            console.log(res);
+            console.log(this.messages);
+            //const newItemList = this.messages.push(...res);
+            this.messages.push(...res);
+            $state.loaded();
+          })
+          .catch((e) => console.log(e));
+      }, 1000);
     },
   },
+
   //어떻게 비교하느냐. -> 현재 userId 파악 -> itemList를 순회해서 msg.itemList[0]._sender.userId이
   //this.userId와 다르면 각각 다른  요소에 class를 준다. userId = userId 이면 .me
   //다르면 stranger
-  mounted() {
-    if (this.userId !== this.msg.itemList[0]._sender.userId) {
-      console.log("dddd");
+
+  async created() {
+    const sendbirdAction = SendbirdAction.getInstance();
+    const error = await sendbirdAction.init(
+      "김인태",
+      "김인태",
+      "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
+    );
+
+    if (!error) {
+      sendbirdAction.getMessageList(this.loadMessage).then((response) => {
+        this.messages = response;
+        if (this.messages.length > 0) {
+          this.showInfiniteLoadingIndicator = true;
+        }
+      });
+
+      const channelEvent = new SendBirdEvent();
+
+      channelEvent.onMessageReceived((message) => {
+        this.messages = [message].concat(this.messages);
+      });
+
+      channelEvent.onMessageReceived((file) => {
+        this.messages = [file].concat(this.messages);
+      });
     }
   },
 };

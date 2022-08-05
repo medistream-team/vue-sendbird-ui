@@ -1,7 +1,6 @@
 <template>
   <div class="chat-container">
     <!-- <header-bar></header-bar> -->
-    <button @click="convert"></button>
     <message-header></message-header>
 
     <!--file-import @fileSelect="addInputFile"></file-import> -->
@@ -14,10 +13,10 @@
     </message-input>
 
     <message-log
-      v-model="messages"
       :userId="userId"
       :classValue="classValue"
       :sort-direction="sortDirection"
+      :load-message="loadMessage"
     ></message-log>
 
     <message-input
@@ -34,9 +33,7 @@
 import MessageInput from "@/components/MessageInput";
 import MessageLog from "@/components/MessageLog";
 import MessageHeader from "./MessageHeader.vue";
-import { computed } from "vue";
 import { SendbirdAction } from "@/sendbird/SendbirdAction";
-import { SendBirdEvent } from "@/sendbird/SendbirdEvent";
 
 export default {
   name: "MessageWidget",
@@ -47,6 +44,7 @@ export default {
     MessageLog,
     MessageHeader,
   },
+
   props: {
     sortDirection: {
       type: String,
@@ -69,21 +67,9 @@ export default {
     },
   },
 
-  provide() {
-    return {
-      msg: computed(() => {
-        return this.messages; // 콜백 함수 형태로 return
-      }),
-    };
-  },
-
   data() {
     return {
       showInfiniteLoadingIndicator: false,
-      messages: {
-        hasMoreMessage: false,
-        itemList: [],
-      },
       scrollElement: document.querySelector(".chat-container"),
       classValue: true,
       channel1:
@@ -99,12 +85,11 @@ export default {
   //toggle button들 만들기
   watch: {
     sortDirection: {
-      immediate: true,
       handler: function (value) {
         if (value !== "top") {
-          this.messages.itemList.reverse();
+          this.messages.reverse();
         } else {
-          this.messages.itemList.reverse();
+          this.messages.reverse();
         }
       },
     },
@@ -134,68 +119,14 @@ export default {
     },
   },
   methods: {
-    convert() {},
     addInputMessage: function (message) {
-      this.messages.itemList = [message].concat(this.messages.itemList);
+      this.messages = [message].concat(this.messages);
     },
 
     addInputFile: function (file) {
       console.log("hi", file.url);
-      this.messages.itemList = [file].concat(this.messages.itemList);
+      this.messages = [file].concat(this.messages);
     },
-    infiniteHandler($state) {
-      //얼만큼 실행할 것인가. 채팅 내역 갯수만큼. <- 어떻게 구할 것인가?
-      //
-      console.log("dd");
-      const sendbirdAction = SendbirdAction.getInstance();
-      setTimeout(() => {
-        sendbirdAction
-          .getMessageList(this.loadMessage)
-          .then((res) => {
-            console.log(res.hasMoreMessage);
-            const newItemList = this.messages.itemList.concat(res.itemList);
-            this.messages = {
-              hasMoreMessage: res.hasMoreMessage,
-              itemList: newItemList,
-            };
-            $state.loaded();
-          })
-          .catch((e) => console.log(e));
-      }, 1000);
-    },
-  },
-
-  async created() {
-    const sendbirdAction = SendbirdAction.getInstance();
-    const error = await sendbirdAction.init(
-      "김인태",
-      this.nickname,
-      this.channel
-    );
-
-    if (!error) {
-      sendbirdAction
-        .getMessageList(this.loadMessage)
-
-        .then((response) => {
-          this.messages = response;
-          if (this.messages.hasMoreMessage) {
-            setTimeout(() => {
-              this.showInfiniteLoadingIndicator = true;
-            }, 1000);
-          }
-        });
-
-      const channelEvent = new SendBirdEvent();
-
-      channelEvent.onMessageReceived((message) => {
-        this.messages.itemList = [message].concat(this.messages.itemList);
-      });
-
-      channelEvent.onMessageReceived((file) => {
-        this.messages.itemList = [file].concat(this.messages.itemList);
-      });
-    }
   },
 };
 </script>
