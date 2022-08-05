@@ -12,25 +12,35 @@
       </div>
       <div>
         <p>nickname toggle</p>
-        <button class="toggle_user1" @click="toggleNickname1">
-          toggle {{ nickname1 }}
+        <button class="toggle_user1" @click="toggleNickname">
+          toggle {{ nickname }}
         </button>
-        <button class="toggle_user2" @click="toggleNickname2">
-          toggle {{ nickname2 }}</button
-        ><button class="toggle_channel" @click="toggleChannel">
-          toggle channel
-        </button>
+        <div>
+          <p>channel toggle</p>
+          <button class="toggle_channel" @click="toggleChannel">
+            toggle {{ channel }}
+          </button>
+        </div>
 
         <p>
           {{ channel }}
         </p>
       </div>
+      <div v-for="(item, $index) in list" :key="$index">
+        {{ item.created_at }}
+        <!-- Hacker News item loop -->
+      </div>
+      <infinite-loading
+        :force-use-infinite-wrapper="true"
+        direction="top"
+        @infinite="infiniteHandler"
+      >
+      </infinite-loading>
     </div>
 
     <message-widget
       class="preview"
-      :nickname1="nickname1"
-      :nickname2="nickname2"
+      :nickname="nickname"
       :channel="channel"
       :userId="userId"
       :sort-direction="sortDirection"
@@ -40,20 +50,23 @@
 
 <script>
 import MessageWidget from "./components/MessageWidget.vue";
+import InfiniteLoading from "vue-infinite-loading";
+import axios from "axios";
 
 export default {
   name: "App",
   components: {
+    InfiniteLoading,
     MessageWidget,
   },
 
   data() {
     return {
+      page: 1,
+      list: [],
       sortDirection: "top",
-      nickname1: "user1",
-      nickname2: "user2",
+      nickname: "user1",
       userId: "admin",
-
       //userId를 배열로 만들 수 있는 방법이 없을까?
       channel:
         "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed",
@@ -67,20 +80,34 @@ export default {
     toggleUserId() {
       this.userId = this.userId === "admin" ? "김인태" : "admin";
     },
-    toggleNickname1() {
-      this.nickname1 =
-        this.nickname1 === "nickname1" ? "nickname2" : "nickname1";
+    toggleNickname() {
+      this.nickname =
+        this.nickname === "nickname" ? "another_nickname" : "nickname";
     },
-    toggleNickname2() {
-      this.nickname2 =
-        this.nickname2 === "nickname2" ? "nickname1" : "nickname2";
-    },
+
     toggleChannel() {
       this.channel =
         this.channel ===
         "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed"
           ? "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
           : "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed";
+    },
+    infiniteHandler($state) {
+      axios
+        .get("//hn.algolia.com/api/v1/search_by_date?tags=story", {
+          params: {
+            page: this.page,
+          },
+        })
+        .then(({ data }) => {
+          if (data.hits.length) {
+            this.page += 1;
+            this.list.push(...data.hits);
+            $state.loaded();
+          } else {
+            $state.complete();
+          }
+        });
     },
   },
 };

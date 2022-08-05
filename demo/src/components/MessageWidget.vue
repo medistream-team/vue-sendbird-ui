@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-container" @scroll="handleScroll">
+  <div class="chat-container">
     <!-- <header-bar></header-bar> -->
     <button @click="convert"></button>
     <message-header></message-header>
@@ -12,18 +12,14 @@
     >
       <!-- channel Id가 없을 때 페이지를 만들어보자!-->
     </message-input>
+
     <message-log
       v-model="messages"
       :userId="userId"
       :classValue="classValue"
       :sort-direction="sortDirection"
     ></message-log>
-    <infinite-loading
-      v-if="showInfiniteLoadingIndicator"
-      :force-use-infinite-wrapper="true"
-      direction="top"
-      @infinite="infiniteHandler">
-    </infinite-loading>
+
     <message-input
       v-if="sortDirection === 'bottom'"
       @addInputMessage="addInputMessage"
@@ -34,7 +30,7 @@
 
 <script>
 //import FileImport from "@/components/FileImport";
-import InfiniteLoading from 'vue-infinite-loading';
+//import InfiniteLoading from "vue-infinite-loading";
 import MessageInput from "@/components/MessageInput";
 import MessageLog from "@/components/MessageLog";
 import MessageHeader from "./MessageHeader.vue";
@@ -45,7 +41,7 @@ import { SendBirdEvent } from "@/sendbird/SendbirdEvent";
 export default {
   name: "MessageWidget",
   components: {
-    InfiniteLoading,
+    //InfiniteLoading,
     //FileImport,
     MessageInput,
     MessageLog,
@@ -61,26 +57,18 @@ export default {
       default: "admin",
     },
 
-    nickname1: {
+    nickname: {
       type: String,
-      default: "user1",
+      default: "nickname",
     },
-    nickname2: {
-      type: String,
-      default: "user2",
-    },
+
     channel: {
       type: String,
       default:
         "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c",
     },
   },
-  mounted() {
-    window.addEventListener("scroll", this.handleScroll);
-  },
-  unmounted() {
-    window.removeEventListener("scroll", this.handleScroll);
-  },
+
   provide() {
     return {
       msg: computed(() => {
@@ -96,13 +84,15 @@ export default {
         hasMoreMessage: false,
         itemList: [],
       },
+      scrollElement: document.querySelector(".chat-container"),
       classValue: true,
       channel1:
         "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed",
       channel2:
         "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c",
-      loadMessage: 15,
+      loadMessage: 30,
       page: 1,
+      list: [],
     };
   },
 
@@ -118,35 +108,26 @@ export default {
         }
       },
     },
-    nickname1: {
+    nickname: {
       handler: function (value) {
         const sendbirdAction = SendbirdAction.getInstance();
-        if (value !== "user1") {
-          sendbirdAction.init(this.userId, this.nickname1, this.channel);
+        if (value !== "nickname") {
+          sendbirdAction.init(this.userId, this.nickname, this.channel);
         } else {
-          sendbirdAction.init(this.userId, this.nickname1, this.channel);
+          sendbirdAction.init(this.userId, this.nickname, this.channel);
         }
       },
     },
-    nickname2: {
-      handler: function (value) {
-        const sendbirdAction = SendbirdAction.getInstance();
-        if (value !== "user2") {
-          sendbirdAction.init(this.userId, this.nickname2, this.channel);
-        } else {
-          sendbirdAction.init(this.userId, this.nickname2, this.channel);
-        }
-      },
-    },
+
     channel: {
       handler: function () {
         const sendbirdAction = SendbirdAction.getInstance();
 
         if (this.channel !== this.channel) {
-          sendbirdAction.init(this.userId1, this.channel1);
+          sendbirdAction.init(this.userId, this.nickname, this.channel);
           sendbirdAction.getMessageList(this.loadMessage);
         } else {
-          sendbirdAction.init(this.userId, this.channel2);
+          sendbirdAction.init(this.userId, this.nickname, this.channel);
           sendbirdAction.getMessageList(this.loadMessage);
         }
       },
@@ -162,42 +143,35 @@ export default {
       console.log("hi", file.url);
       this.messages.itemList = [file].concat(this.messages.itemList);
     },
-    infiniteHandler: function ($state) {
-      console.log('Triggered');
-      console.log($state);
-    },
-    handleScroll() {
-      //메시지 리스트를 불러오는 메소드?
-      const chat = document.querySelector(".chat-container");
-      let scrollHeight = chat.scrollHeight;
-      let scrollTop = chat.scrollTop;
+    infiniteHandler($state) {
+      //얼만큼 실행할 것인가. 채팅 내역 갯수만큼. <- 어떻게 구할 것인가?
+      //
+      console.log("dd");
       const sendbirdAction = SendbirdAction.getInstance();
-      console.log("scrollHeight  ::", scrollHeight);
-      console.log("scrollTop  ::", scrollTop);
-      if (scrollTop + 800 === scrollHeight) {
-        console.log("d");
-        this.loadMessage += 15;
-        sendbirdAction.getMessageList(this.loadMessage);
-        const channelEvent = new SendBirdEvent();
-        channelEvent.onMessageReceived((message) => {
-          this.messages.itemList = [message].concat(this.messages.itemList);
-        });
-      }
+      setTimeout(() => {
+        sendbirdAction
+          .getMessageList(this.loadMessage)
+          .then((res) => {
+            console.log(res.hasMoreMessage);
+            const newItemList = this.messages.itemList.concat(res.itemList);
+            this.messages = {
+              hasMoreMessage: res.hasMoreMessage,
+              itemList: newItemList,
+            };
+            $state.loaded();
+          })
+          .catch((e) => console.log(e));
+      }, 1000);
     },
   },
-  //
-  computed: {
-    //sendbirdAction.getMessageList(this.loadMessage)
-    //const sendbirdAction = SendbirdAction.getInstance();
-  },
+
   async created() {
     const sendbirdAction = SendbirdAction.getInstance();
     const error = await sendbirdAction.init(
       "김인태",
-      this.nickname1,
+      this.nickname,
       this.channel
     );
-    // this.msg,,,,,
 
     if (!error) {
       sendbirdAction

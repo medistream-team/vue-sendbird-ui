@@ -16,6 +16,7 @@ class SendbirdAction {
   //"sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed"
   //"sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
   async init(userId, nickname, channel) {
+    console.log("init");
     let error = null;
     try {
       await this.connect(userId, nickname, channel);
@@ -102,6 +103,7 @@ class SendbirdAction {
     });
   }
 
+  //인피니티 scroll이 제일 마지막에 실행되어야함.
   getMessageList(loadMessage) {
     return new Promise((resolve, reject) => {
       if (
@@ -109,6 +111,7 @@ class SendbirdAction {
         !this.previousMessageQuery.isLoading
       ) {
         const params = new this.sb.MessageListParams();
+        console.log("getMessageList");
         //scroll을 내릴 때 마다 증가시킨다?
         //날짜 단위로 가져오기? 연구 해보자 new Date를 하나씩 빼면서?
         //하루 기준으로 해서 그 다음날의 timestamp를 계속 갖고오기.
