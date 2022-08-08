@@ -1,72 +1,74 @@
 <template>
   <div class="message-log">
-    <ul v-if="msg.itemList.length > 0">
-      <li
-        class="chat-item"
-        v-for="message in msg.itemList"
+    <div v-if="messages.length > 0">
+      <div
+        v-bind:class="[classValue ? 'chat-item me' : 'chat-item stranger']"
+        v-for="message in messages"
         :key="message.messageId"
       >
         <p>{{ message.sender.nickname }}</p>
-        <!--nickname이 다르면 ? (내 닉네임은 오른쪽 다르면 왼쪽 색깔도 다르게해보자
-        어떤 것과 비교할껀가요? userId? 같지않았을 떄 다른 class를 주자!
-        버튼도 컴포넌트로 만들어서 사진이 올라왔을 때 사진전송으로 바뀌는 버튼을 만들면 어떨까?
-        링크처럼 만드는게 어떨까? user toggle, channel id toggle
-        검색하는 sendbird function 을 찾아보고 모르면 질문하기.
-        )-->
 
         <div style="white-space: pre-wrap">{{ message.message }}</div>
 
-        <img
-          v-if="message.url && checkType(message.url.toString())"
-          class="file-img"
-          v-bind:src="message.url"
-        />
+        <img v-if="message.url && checkType(message.url.toString())" class="file-img" v-bind:src= message.url>
 
-        <img
-          v-if="message.url && !checkType(message.url.toString())"
-          class="file-file"
-          src="@/assets/file.png"
-        />
-        <a
-          v-if="message.url && !checkType(message.url.toString())"
-          class="file-filename"
-          :href="message.url"
-        >
-          {{ message.url }}
-        </a>
-
+        <img v-if="message.url && !checkType(message.url.toString())" class="file-file" src= "@/assets/file.png">
+        <a v-if="message.url && !checkType(message.url.toString())" class="file-filename" :href="message.url"> {{message.url}} </a> 
+        
         <p>{{ convertDate(message.createdAt) }}</p>
-      </li>
-    </ul>
+      </div>
+      <infinite-loading @infinite="infiniteHandler"> </infinite-loading>
+    </div>
   </div>
 </template>
 <!-- 
 <p>{{ convertDate(message.createdAt) }}</p>
  <button @click="more" v-if="messages.hasMoreMessage">더보기</button>
+ const chat = document.querySelector(
+        ".chat-container li:nth-child(4) div"
+      );
+  nickname 과 message.nickname이 같을 때 list에 class를 준다
+  어떻게 줄것? 
 -->
 <script>
 import { format } from "date-fns";
-
+import InfiniteLoading from "vue-infinite-loading";
+import { SendbirdAction } from "@/sendbird/SendbirdAction";
+import { SendBirdEvent } from "@/sendbird/SendbirdEvent";
 export default {
-  name: "MessageLog",
-  data() {
-    return {};
+  components: {
+    InfiniteLoading,
   },
+  name: "MessageLog",
 
-  inject: ["msg"],
   props: {
     sortDirection: {
       type: String,
       default: "top",
     },
+    classValue: {
+      type: Boolean,
+      default: true,
+    },
+    userId: {
+      type: String,
+      default: "admin",
+    },
+    nickname: {
+      type: String,
+      default: "nickname",
+    },
+  },
+  data() {
+    return {
+      messages: [],
+      loadMessage: 20,
+    };
   },
   methods: {
     convertDate(date) {
       return format(date, "yyyy-MM-dd HH:mm");
     },
-
-    // if true, then image
-    // if false, then document
     checkType(fileUrl) {
       if (
         fileUrl.includes("jpeg") ||
@@ -78,11 +80,60 @@ export default {
         return false;
       }
     },
+
+    infiniteHandler($state) {
+      const sendbirdAction = SendbirdAction.getInstance();
+
+      setTimeout(() => {
+        sendbirdAction
+          .getMessageList(this.loadMessage)
+          .then((res) => {
+            console.log(res);
+
+            this.loadMessage += 20;
+            //const newItemList = this.messages.push(...res);
+            this.messages.push(...res);
+
+            $state.loaded();
+          })
+          .catch(() => $state.complete());
+      }, 1000);
+    },
   },
-  provide() {
-    return {
-      title: "김인태",
-    };
+
+  //어떻게 비교하느냐. -> 현재 userId 파악 -> itemList를 순회해서 msg.itemList[0]._sender.userId이
+  //this.userId와 다르면 각각 다른  요소에 class를 준다. userId = userId 이면 .me
+  //다르면 stranger
+  // if (this.nickname === this.messages[0]._sender.nickname) {
+  //    console.log("dd");
+  //  }
+
+  async created() {
+    const sendbirdAction = SendbirdAction.getInstance();
+    const error = await sendbirdAction.init(
+      "김인태",
+      "김인태",
+      "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
+    );
+
+    if (!error) {
+      sendbirdAction.getMessageList(this.loadMessage).then((response) => {
+        this.messages = response;
+        if (this.messages.length > 0) {
+          this.showInfiniteLoadingIndicator = true;
+        }
+      });
+
+      const channelEvent = new SendBirdEvent();
+
+      channelEvent.onMessageReceived((message) => {
+        this.messages = [message].concat(this.messages);
+      });
+
+      channelEvent.onMessageReceived((file) => {
+        this.messages = [file].concat(this.messages);
+      });
+    }
   },
 };
 </script>
@@ -101,12 +152,21 @@ export default {
 }
 
 .chat-item {
+  position: relative;
   width: 250px;
   padding: 20px;
   margin-bottom: 20px;
   border-radius: 15px;
   list-style-type: none;
-  background-color: gray;
-  color: white;
+}
+
+.me {
+  float: right;
+  background: #fef01b;
+}
+
+.stranger {
+  float: left;
+  background: white;
 }
 </style>

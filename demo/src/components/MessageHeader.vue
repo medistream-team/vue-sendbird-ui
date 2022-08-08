@@ -32,22 +32,16 @@ export default {
       modal: true,
     };
   },
-  inject: ["msg"],
 
-  filters: {
-    messageFilter() {
-      return this.msg.itemList
-        .map((message) => message.message)
-        .filter((num) => {
-          return num.toLowerCase().includes(this.filteringText.toLowerCase());
-        });
-    },
-  },
-  //  const chat = document.querySelector(
-  //         ".chat-container li:nth-child(2) div"
-  //       );
-  //       console.log(chat.innerText);
-  //       console.log(this.filteringNumber);
+  // filters: {
+  //   messageFilter() {
+  //     return this.msg.itemList
+  //       .map((message) => message.message)
+  //       .filter((num) => {
+  //         return num.toLowerCase().includes(this.filteringText.toLowerCase());
+  //       });
+  //   },
+  // },
 
   methods: {
     modalClick() {
