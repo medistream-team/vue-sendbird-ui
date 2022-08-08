@@ -4,7 +4,7 @@
       name="files"
       ref="fileref"
       credits=""
-      label-idle="드래그 앤 드롭 or <span class='filepond--label-action'>파일찾기</span>"
+      label-idle="<span class='filepond--label-action'>file</span>"
       accepted-file-types="image/jpeg, image/png"
       :allow-multiple="true"
       v-on:init="handleFilePondInit"

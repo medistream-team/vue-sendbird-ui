@@ -15,15 +15,16 @@ class SendbirdAction {
   }
   //"sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed"
   //"sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
-  async init(userId, channel) {
+  async init(userId, nickname, channel) {
+    console.log("init");
     let error = null;
     try {
-      await this.connect("admin", userId);
+      await this.connect(userId, nickname, channel);
       this.channel = await this.getChannel(channel);
       await this.join();
       this.previousMessageQuery = this.channel.createPreviousMessageListQuery();
 
-      this.previousMessageQuery.reverse = false;
+      this.previousMessageQuery.reverse = true;
     } catch (e) {
       error = e;
     }
@@ -102,48 +103,13 @@ class SendbirdAction {
     });
   }
 
-  /*
-        );
-
-        this.previousMessageQuery.load(10, (messageList, error) => {
-          const response = {
-            hasMoreMessage: this.previousMessageQuery.hasMore,
-            itemList: messageList,
-          };
-          error ? reject(error) : resolve(response);
-        });
-      } else {
-        resolve([]);
-      }
-    });
-  }
-  */
-
   getMessageList(loadMessage) {
     return new Promise((resolve, reject) => {
-      if (
-        this.previousMessageQuery.hasMore &&
-        !this.previousMessageQuery.isLoading
-      ) {
-        const params = new this.sb.MessageListParams();
-        //scroll을 내릴 때 마다 증가시킨다?
-        //날짜 단위로 가져오기? 연구 해보자 new Date를 하나씩 빼면서?
-        //하루 기준으로 해서 그 다음날의 timestamp를 계속 갖고오기.
-        // 그러면 getMessageList를 scroll 했을 때 y좌표가 어느정도까지 내려왔을 때 호출 할까?
-
-        params.prevResultSize = loadMessage;
-        this.channel.getMessagesByTimestamp(
-          Date.now(),
-          params,
-          (messages, error) => {
-            console.log(messages);
-            const response = {
-              hasMoreMessage: this.previousMessageQuery.hasMore,
-              itemList: messages,
-            };
-            error ? reject(error) : resolve(response);
-          }
-        );
+      if (!this.previousMessageQuery.isLoading) {
+        this.previousMessageQuery.load(loadMessage, (messageList, error) => {
+          const response = messageList;
+          error ? reject(error) : resolve(response);
+        });
       } else {
         resolve([]);
       }
