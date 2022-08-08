@@ -19,22 +19,36 @@
         v-model="message"
         @keydown.enter.exact.prevent="sendMessage"
       />
+
     </div>
 
-    <FileImport @customChange="handleFilesUpload" ref="fileSelect"></FileImport>
-    <!--input
+     <!--input
       v-show="ghostFileInputVisible"
       type="file"
       class="ghost-file-input"
       @input="handleNativeFileInput"-->
 
-    <button v-if="message" @click="sendMessage">보내기</button>
+    <FileImport @customChange="handleFilesUpload" ref="fileSelect"></FileImport>
+        
+   
+
+    <button v-if="message"  @click="sendMessage">보내기</button>
+    <input type="file" 
+           class="ghost-file-input-top" 
+           @input="handleNativeFileInput"
+           ref="fileDrag"
+           @click.prevent = ""
+           />
+   
   </div>
 </template>
 
 <script>
 import { SendbirdAction } from "@/sendbird/SendbirdAction";
 import FileImport from "./FileImport.vue";
+import axios from 'axios'
+
+
 
 export default {
   name: "MessageInput",
@@ -43,7 +57,8 @@ export default {
     return {
       message: "",
       file: "",
-      ghostFileInputVisible: true,
+      className:"",
+      //ghostFileInputVisible: true,
     };
   },
   // mounted() {
@@ -52,6 +67,8 @@ export default {
   // unmounted() {
   //   document.querySelectorAll('.chat-container')[0].removeEventListener('mousedown', this.handleMouseDown);
   // },
+
+
   methods: {
     sendMessage: function (event) {
       if (event.isComposing) {
@@ -71,9 +88,27 @@ export default {
     //   console.log(event);
     // },
 
-    //handleNativeFileInput: function (event) {
-    //  console.log(event);
-    //},
+    handleNativeFileInput: function (event) {
+      //let image = event.target.files[0];
+      //console.log(event.target.files[0].url);
+      this.$refs.fileSelect.addDropFile(event.target.files[0]);
+      
+      //axios.post('http://localhost:3000/uploads', {image})
+      //.then(res => {
+      // console.log(res.data)
+      //})
+      
+
+      //const reader = new FileReader();
+      //reader.readAsDataURL(image);
+      //reader.onload = function (event) {
+      //  console.log(event.target.result);
+      //}
+      //this.$refs.fileDrag.addDropFile(event.target.result);
+      //console.log(event.target.files[0].name);
+      //console.log(newFile);
+    },
+
     handleFilesUpload: function (event) {
       this.file = event;
       console.log(event);
@@ -87,6 +122,17 @@ export default {
     trigger: function () {
       this.$refs.fileSelect.handleOpenFile();
     },
+
+    test: function(e) {
+      this.$refs.fileDrag.addDropFile(e);
+    },
+
+    localFileUpload: function() {
+      axios.post('http://localhost:3000/upload')
+      .then(res => {
+        console.log(res.data);
+      })
+    }
   },
 };
 </script>
@@ -115,12 +161,24 @@ export default {
   cursor: pointer;
 }
 
-.ghost-file-input {
+.ghost-file-input-top {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  top: 160px;
+  left: 0px;
+  right: 0px;
+  bottom: -9999px;
+  background-color: rgba(255, 0, 0, 0.1);
+  text-indent: -9999px;
+  /* pointer-events: none; */
+}
+
+
+.ghost-file-input-bottom {
+  position: fixed;
+  top: 110px;
+  left: 0px;
+  right: 0px;
+  bottom: -3390px;
   background-color: rgba(255, 0, 0, 0.1);
   text-indent: -9999px;
   /* pointer-events: none; */

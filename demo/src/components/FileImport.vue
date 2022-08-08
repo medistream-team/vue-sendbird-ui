@@ -74,10 +74,15 @@ export default {
       this.$refs.fileref.browse();
     },
 
+    addDropFile: function(url) {
+      this.$refs.fileref.addFile(url);
+      console.log("ITISWORKING")
+    },
+
     emitThis: function () {
       this.$emit("customChange", this.fileList);
       this.$refs.fileref.removeFile();
-      this.$refs.filedrag.removeFile();
+      //this.$refs.filedrag.removeFile();
     },
   },
 };
@@ -91,10 +96,11 @@ export default {
 
 .filepond--drop-label {
   background-color: #F5F5F5;
+  width: 10px;
 }
 
 .filepond--root .filepond--drop-label {
-  min-height: 1em;
+  min-height: 1em
 }
 
 

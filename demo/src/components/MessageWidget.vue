@@ -2,13 +2,15 @@
   <div class="chat-container" @scroll="handleScroll">
     <!-- <header-bar></header-bar> -->
 
+    <!--file-import @fileSelect="addInputFile"></file-import> -->
+
+
     <div>{{ userId1 }}</div>
     <div>{{ channel }}</div>
     <button @click="clickcc">{{ loadMessage }}</button>
     <message-header></message-header>
   
 
-    <!--file-import @fileSelect="addInputFile"></file-import> -->
     <message-input @addInputMessage="addInputMessage"
                    @addInputFile="addInputFile"
                    v-if="sortDirection === 'top'"
@@ -32,6 +34,7 @@
 import MessageInput from "@/components/MessageInput";
 import MessageLog from "@/components/MessageLog";
 import MessageHeader from "./MessageHeader.vue";
+
 
 
 import { computed } from "vue";
