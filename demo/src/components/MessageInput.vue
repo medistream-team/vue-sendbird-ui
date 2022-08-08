@@ -19,36 +19,31 @@
         v-model="message"
         @keydown.enter.exact.prevent="sendMessage"
       />
-
     </div>
 
-     <!--input
+    <!--input
       v-show="ghostFileInputVisible"
       type="file"
       class="ghost-file-input"
       @input="handleNativeFileInput"-->
 
     <FileImport @customChange="handleFilesUpload" ref="fileSelect"></FileImport>
-        
-   
 
-    <button v-if="message"  @click="sendMessage">보내기</button>
-    <input type="file" 
-           class="ghost-file-input-top" 
-           @input="handleNativeFileInput"
-           ref="fileDrag"
-           @click.prevent = ""
-           />
-   
+    <button v-if="message" @click="sendMessage">보내기</button>
+    <input
+      type="file"
+      class="ghost-file-input-top"
+      @input="handleNativeFileInput"
+      ref="fileDrag"
+      @click.prevent=""
+    />
   </div>
 </template>
 
 <script>
 import { SendbirdAction } from "@/sendbird/SendbirdAction";
 import FileImport from "./FileImport.vue";
-import axios from 'axios'
-
-
+import axios from "axios";
 
 export default {
   name: "MessageInput",
@@ -57,17 +52,10 @@ export default {
     return {
       message: "",
       file: "",
-      className:"",
+      className: "",
       //ghostFileInputVisible: true,
     };
   },
-  // mounted() {
-  //   document.querySelectorAll('.chat-container')[0].addEventListener('mousedown', this.handleMouseDown);
-  // },
-  // unmounted() {
-  //   document.querySelectorAll('.chat-container')[0].removeEventListener('mousedown', this.handleMouseDown);
-  // },
-
 
   methods: {
     sendMessage: function (event) {
@@ -92,12 +80,11 @@ export default {
       //let image = event.target.files[0];
       //console.log(event.target.files[0].url);
       this.$refs.fileSelect.addDropFile(event.target.files[0]);
-      
+
       //axios.post('http://localhost:3000/uploads', {image})
       //.then(res => {
       // console.log(res.data)
       //})
-      
 
       //const reader = new FileReader();
       //reader.readAsDataURL(image);
@@ -123,16 +110,15 @@ export default {
       this.$refs.fileSelect.handleOpenFile();
     },
 
-    test: function(e) {
+    test: function (e) {
       this.$refs.fileDrag.addDropFile(e);
     },
 
-    localFileUpload: function() {
-      axios.post('http://localhost:3000/upload')
-      .then(res => {
+    localFileUpload: function () {
+      axios.post("http://localhost:3000/upload").then((res) => {
         console.log(res.data);
-      })
-    }
+      });
+    },
   },
 };
 </script>
@@ -171,7 +157,6 @@ export default {
   text-indent: -9999px;
   /* pointer-events: none; */
 }
-
 
 .ghost-file-input-bottom {
   position: fixed;
