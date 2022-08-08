@@ -13,10 +13,10 @@
     </message-input>
 
     <message-log
+      :nickname="nickname"
       :userId="userId"
       :classValue="classValue"
       :sort-direction="sortDirection"
-      :load-message="loadMessage"
     ></message-log>
 
     <message-input
@@ -76,9 +76,7 @@ export default {
         "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed",
       channel2:
         "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c",
-      loadMessage: 30,
-      page: 1,
-      list: [],
+      loadMessage: 20,
     };
   },
 

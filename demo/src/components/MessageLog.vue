@@ -68,14 +68,15 @@ export default {
       type: String,
       default: "admin",
     },
-    loadMessage: {
-      type: Number,
-      default: 10,
+    nickname: {
+      type: String,
+      default: "nickname",
     },
   },
   data() {
     return {
       messages: [],
+      loadMessage: 20,
     };
   },
   methods: {
@@ -96,17 +97,20 @@ export default {
 
     infiniteHandler($state) {
       const sendbirdAction = SendbirdAction.getInstance();
+
       setTimeout(() => {
         sendbirdAction
           .getMessageList(this.loadMessage)
           .then((res) => {
             console.log(res);
-            console.log(this.messages);
+
+            this.loadMessage += 20;
             //const newItemList = this.messages.push(...res);
             this.messages.push(...res);
+
             $state.loaded();
           })
-          .catch((e) => console.log(e));
+          .catch(() => $state.complete());
       }, 1000);
     },
   },
@@ -114,6 +118,9 @@ export default {
   //어떻게 비교하느냐. -> 현재 userId 파악 -> itemList를 순회해서 msg.itemList[0]._sender.userId이
   //this.userId와 다르면 각각 다른  요소에 class를 준다. userId = userId 이면 .me
   //다르면 stranger
+  // if (this.nickname === this.messages[0]._sender.nickname) {
+  //    console.log("dd");
+  //  }
 
   async created() {
     const sendbirdAction = SendbirdAction.getInstance();

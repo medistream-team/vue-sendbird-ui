@@ -24,7 +24,7 @@ class SendbirdAction {
       await this.join();
       this.previousMessageQuery = this.channel.createPreviousMessageListQuery();
 
-      this.previousMessageQuery.reverse = false;
+      this.previousMessageQuery.reverse = true;
     } catch (e) {
       error = e;
     }
@@ -103,33 +103,13 @@ class SendbirdAction {
     });
   }
 
-  //인피니티 scroll이 제일 마지막에 실행되어야함.
-  // this.previousMessageQuery.load(loadMessage, (messageList, error) => {
-  //   const response = {
-  //     hasMoreMessage: this.previousMessageQuery.hasMore,
-  //     itemList: messageList,
-  //   };
-  //   error ? reject(error) : resolve(response);
-  // });
   getMessageList(loadMessage) {
     return new Promise((resolve, reject) => {
-      if (
-        this.previousMessageQuery.hasMore &&
-        !this.previousMessageQuery.isLoading
-      ) {
-        const params = new this.sb.MessageListParams();
-        params.prevResultSize = loadMessage;
-        this.channel.getMessagesByTimestamp(
-          Date.now(),
-          params,
-          (messages, error) => {
-            console.log(messages, "sendbirdAction");
-            const response = messages;
-            error
-              ? reject(error)
-              : resolve(response, console.log(response, "respon"));
-          }
-        );
+      if (!this.previousMessageQuery.isLoading) {
+        this.previousMessageQuery.load(loadMessage, (messageList, error) => {
+          const response = messageList;
+          error ? reject(error) : resolve(response);
+        });
       } else {
         resolve([]);
       }
