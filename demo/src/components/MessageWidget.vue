@@ -13,13 +13,10 @@
       <!-- channel Id가 없을 때 페이지를 만들어보자!-->
     </message-input>
 
-    <message-log
-      v-model="msg"
-      :nickname="nickname"
-      :userId="userId"
-      :classValue="classValue"
-      :sort-direction="sortDirection"
-    >
+    <message-log v-model="msg"
+      >>>>>>> 134baeee1108d87e6cf5b32b20ae39f1199563bc :nickname="nickname"
+      :userId="userId" :classValue="classValue" :sort-direction="sortDirection"
+      >
     </message-log>
 
     <message-input
@@ -81,6 +78,7 @@ export default {
       channel2:
         "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c",
       loadMessage: 20,
+
       msg: [],
     };
   },

@@ -38,6 +38,15 @@
       ref="fileDrag"
       @click.prevent=""
     />
+
+    <FileImport @customChange="handleFilesUpload" ref="fileSelect"></FileImport>
+
+    <!--input type="file" 
+           class="ghost-file-input-top" 
+           @input="handleNativeFileInput"
+           ref="fileDrag"
+           @click.prevent = ""
+           /-->
   </div>
 </template>
 
@@ -72,6 +81,20 @@ export default {
 
     handleNativeFileInput: function (event) {
       this.$refs.fileSelect.addDropFile(event.target.files[0]);
+
+      //axios.post('http://localhost:3000/uploads', {image})
+      //.then(res => {
+      // console.log(res.data)
+      //})
+
+      //const reader = new FileReader();
+      //reader.readAsDataURL(image);
+      //reader.onload = function (event) {
+      //  console.log(event.target.result);
+      //}
+      //this.$refs.fileDrag.addDropFile(event.target.result);
+      //console.log(event.target.files[0].name);
+      //console.log(newFile);
     },
 
     handleFilesUpload: function (event) {
@@ -133,6 +156,7 @@ export default {
   bottom: -9999px;
   background-color: rgba(255, 0, 0, 0.1);
   text-indent: -9999px;
+  z-index: 10;
   /* pointer-events: none; */
 }
 
@@ -144,6 +168,7 @@ export default {
   bottom: -3390px;
   background-color: rgba(255, 0, 0, 0.1);
   text-indent: -9999px;
+  z-index: 10;
   /* pointer-events: none; */
 }
 

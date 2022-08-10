@@ -117,6 +117,7 @@ class SendbirdAction {
         //     error ? reject(error) : resolve(response);
         //   }
         // );
+
         const params = new this.sb.MessageListParams();
         params.prevResultSize = loadMessage;
         this.channel.getMessagesByTimestamp(
