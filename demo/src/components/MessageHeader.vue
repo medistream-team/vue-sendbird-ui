@@ -32,17 +32,6 @@ export default {
       modal: true,
     };
   },
-
-  // filters: {
-  //   messageFilter() {
-  //     return this.msg.itemList
-  //       .map((message) => message.message)
-  //       .filter((num) => {
-  //         return num.toLowerCase().includes(this.filteringText.toLowerCase());
-  //       });
-  //   },
-  // },
-
   methods: {
     modalClick() {
       if (this.modal) {
