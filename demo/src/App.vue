@@ -26,10 +26,6 @@
           {{ channel }}
         </p>
       </div>
-      <div v-for="(item, $index) in list" :key="$index">
-        {{ item.created_at }}
-        <!-- Hacker News item loop -->
-      </div>
     </div>
 
     <message-widget
@@ -71,6 +67,7 @@ export default {
     toggleUserId() {
       this.userId = this.userId === "admin" ? "김인태" : "admin";
     },
+
     toggleNickname() {
       this.nickname =
         this.nickname === "nickname" ? "another_nickname" : "nickname";
