@@ -10,11 +10,25 @@
 
         <div style="white-space: pre-wrap">{{ message.message }}</div>
 
-        <img v-if="message.url && checkType(message.url.toString())" class="file-img" v-bind:src= message.url>
+        <img
+          v-if="message.url && checkType(message.url.toString())"
+          class="file-img"
+          v-bind:src="message.url"
+        />
 
-        <img v-if="message.url && !checkType(message.url.toString())" class="file-file" src= "@/assets/file.png">
-        <a v-if="message.url && !checkType(message.url.toString())" class="file-filename" :href="message.url"> {{message.url}} </a> 
-        
+        <img
+          v-if="message.url && !checkType(message.url.toString())"
+          class="file-file"
+          src="@/assets/file.png"
+        />
+        <a
+          v-if="message.url && !checkType(message.url.toString())"
+          class="file-filename"
+          :href="message.url"
+        >
+          {{ message.url }}
+        </a>
+
         <p>{{ convertDate(message.createdAt) }}</p>
       </div>
       <infinite-loading @infinite="infiniteHandler"> </infinite-loading>
@@ -62,7 +76,8 @@ export default {
   data() {
     return {
       messages: [],
-      loadMessage: 20,
+      loadMessage: 15,
+      timestamp: 0,
     };
   },
   methods: {
