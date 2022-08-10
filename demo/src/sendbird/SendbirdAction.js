@@ -105,11 +105,20 @@ class SendbirdAction {
 
   getMessageList(loadMessage) {
     return new Promise((resolve, reject) => {
-      if (!this.previousMessageQuery.isLoading) {
-        this.previousMessageQuery.load(loadMessage, (messageList, error) => {
-          const response = messageList;
-          error ? reject(error) : resolve(response);
-        });
+      if (
+        this.previousMessageQuery.hasMore &&
+        !this.previousMessageQuery.isLoading
+      ) {
+        const params = new this.sb.MessageListParams();
+        params.prevResultSize = loadMessage;
+        this.channel.getMessagesByTimestamp(
+          Date.now(),
+          params,
+          (messages, error) => {
+            const response = messages;
+            error ? reject(error) : resolve(response);
+          }
+        );
       } else {
         resolve([]);
       }
