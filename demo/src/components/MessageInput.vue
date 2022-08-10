@@ -154,7 +154,7 @@ export default {
   left: 0px;
   right: 0px;
   bottom: -9999px;
-  background-color: rgba(255, 0, 0, 0.1);
+
   text-indent: -9999px;
   z-index: 10;
   /* pointer-events: none; */
@@ -166,7 +166,7 @@ export default {
   left: 0px;
   right: 0px;
   bottom: -3390px;
-  background-color: rgba(255, 0, 0, 0.1);
+
   text-indent: -9999px;
   z-index: 10;
   /* pointer-events: none; */
