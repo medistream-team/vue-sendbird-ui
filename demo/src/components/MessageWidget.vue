@@ -102,10 +102,10 @@ export default {
   watch: {
     sortDirection: {
       handler: function (value) {
-        if (value !== "top") {
-          this.msg.reverse();
+        if (value === "top") {
+          this.messages.reverse();
         } else {
-          this.msg.reverse();
+          this.messages.reverse();
         }
       },
     },
@@ -134,6 +134,7 @@ export default {
       },
     },
   },
+
   methods: {
     addInputMessage: function (message) {
       this.messages = [message].concat(this.messages);

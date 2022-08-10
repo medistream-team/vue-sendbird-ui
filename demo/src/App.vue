@@ -52,12 +52,9 @@ export default {
 
   data() {
     return {
-      page: 1,
-      list: [],
       sortDirection: "top",
       nickname: "user1",
       userId: "admin",
-      //userId를 배열로 만들 수 있는 방법이 없을까?
       channel:
         "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed",
     };

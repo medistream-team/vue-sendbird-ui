@@ -1,15 +1,18 @@
 
-
 <template>
   <div class="message-log">
-    <div v-if="messages.length > 0">
+
+    <div v-if="msg.length > 0">
+
       <infinite-loading
         v-if="sortDirection === 'bottom'"
         direction="top"
         @infinite="infiniteHandler"
       >
       </infinite-loading>
-      <div v-for="message in messages " :key="message.messageId">
+
+      <div v-for="message in msg" :key="message.messageId">
+
         <div
           v-bind:class="[classValue ? 'chat-item me' : 'chat-item stranger']"
         >
@@ -87,11 +90,16 @@ export default {
       default: "nickname",
     },
   },
+ 
+ 
   inject: {
       config: {
           themeColor: '#1d77ff'
       }, 
+      msg: "msg"
   },
+  
+
   data() {
     return {
       messages: [],
@@ -99,17 +107,8 @@ export default {
       timestamp: 0,
     };
   },
-  created() {
-    return {
-      seperateChat() {
-        for (const eachMsg in this.messages) {
-          if (eachMsg._sender.nickname === this.nickname) {
-            console.log(this.nickname);
-          }
-        }
-      },
-    };
-  },
+
+
   methods: {
     convertDate(date) {
       return format(date, "yyyy-MM-dd HH:mm");

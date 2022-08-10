@@ -165,7 +165,6 @@ button.send-message {
   right: 0px;
   bottom: 0;
   background-color: rgba(255, 0, 0, 0.1);
-  text-indent: -9999px;
   z-index: 10;
   /* pointer-events: none; */
 }
