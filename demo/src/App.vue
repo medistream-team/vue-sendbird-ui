@@ -103,6 +103,7 @@ export default {
   left: 75%;
   width: 600px;
   height: 800px;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3), 0 10px 30px 0 rgba(0, 0, 0, 0.1);
   transform: translate(-50%, -50%);
 }
 </style>
