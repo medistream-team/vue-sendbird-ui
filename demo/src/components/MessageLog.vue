@@ -39,6 +39,7 @@ export default {
   components: {
     InfiniteLoading,
   },
+  
   name: "MessageLog",
 
   props: {
@@ -48,7 +49,7 @@ export default {
     },
     classValue: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     userId: {
       type: String,
@@ -162,11 +163,13 @@ export default {
 
 .me {
   float: right;
+  margin-left: 30px;
   background: #fef01b;
 }
 
 .stranger {
   float: left;
+  margin-right: 30px;
   background: white;
 }
 </style>

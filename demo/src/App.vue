@@ -71,6 +71,7 @@ export default {
     toggleUserId() {
       this.userId = this.userId === "admin" ? "김인태" : "admin";
     },
+
     toggleNickname() {
       this.nickname =
         this.nickname === "nickname" ? "another_nickname" : "nickname";

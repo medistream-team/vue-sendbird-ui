@@ -27,11 +27,6 @@
 
     > </message-input>
 
-    <message-input
-      v-if="sortDirection === 'bottom'"
-      @addInputMessage="addInputMessage"
-      @addInputFile="addInputFile"
-    ></message-input>
   </div>
 </template>
 
@@ -39,7 +34,6 @@
 import MessageInput from "@/components/MessageInput";
 import MessageLog from "@/components/MessageLog";
 import MessageHeader from "./MessageHeader.vue";
-
 
 
 //import FileImport from "@/components/FileImport";
@@ -134,7 +128,6 @@ export default {
     },
 
     addInputFile: function (file) {
-      console.log("hi", file.url);
       this.messages = [file].concat(this.messages);
     },
   },

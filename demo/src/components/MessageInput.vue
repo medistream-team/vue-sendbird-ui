@@ -28,17 +28,23 @@
       class="ghost-file-input"
       @input="handleNativeFileInput"-->
 
-    <FileImport @customChange="handleFilesUpload" ref="fileSelect"></FileImport>
-        
-   
-
-    <button v-if="message"  @click="sendMessage">보내기</button>
     <input type="file" 
            class="ghost-file-input-top" 
            @input="handleNativeFileInput"
            ref="fileDrag"
            @click.prevent = ""
            />
+
+    <FileImport @customChange="handleFilesUpload" ref="fileSelect"></FileImport>
+        
+
+    <button v-if="message"  @click="sendMessage">보내기</button>
+    <!--input type="file" 
+           class="ghost-file-input-top" 
+           @input="handleNativeFileInput"
+           ref="fileDrag"
+           @click.prevent = ""
+           /-->
    
   </div>
 </template>
@@ -169,6 +175,7 @@ export default {
   bottom: -9999px;
   background-color: rgba(255, 0, 0, 0.1);
   text-indent: -9999px;
+  z-index: 10;
   /* pointer-events: none; */
 }
 
@@ -181,6 +188,7 @@ export default {
   bottom: -3390px;
   background-color: rgba(255, 0, 0, 0.1);
   text-indent: -9999px;
+  z-index: 10;
   /* pointer-events: none; */
 }
 
