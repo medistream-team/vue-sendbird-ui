@@ -1,8 +1,8 @@
 <template>
-  <div class="input-container">
+  <div class="message-input">
     <div class="file-send">
       <button class="file-send-button" @click="trigger">
-        <i class="ii ii-attachment"> </i>
+        <i class="ii ii-attachment"></i>
       </button>
 
       <!-- File Upload -->
@@ -15,12 +15,11 @@
 
       <textarea
         class="text-input"
-        placeholder="새로운 메시지를 입력하세요..."
+        placeholder="메시지를 입력하세요."
         v-model="message"
         @keydown.enter.exact.prevent="sendMessage"
       />
     </div>
-    <p>{{ message }}</p>
 
     <!--input
       v-show="ghostFileInputVisible"
@@ -28,9 +27,10 @@
       class="ghost-file-input"
       @input="handleNativeFileInput"-->
 
+    <!-- <button class="send-message" @click="sendMessage">보내기</button> -->
+
     <FileImport @customChange="handleFilesUpload" ref="fileSelect"></FileImport>
 
-    <button v-if="message" @click="sendMessage">보내기</button>
     <input
       type="file"
       class="ghost-file-input-top"
@@ -39,14 +39,7 @@
       @click.prevent=""
     />
 
-    <FileImport @customChange="handleFilesUpload" ref="fileSelect"></FileImport>
-
-    <!--input type="file" 
-           class="ghost-file-input-top" 
-           @input="handleNativeFileInput"
-           ref="fileDrag"
-           @click.prevent = ""
-           /-->
+   
   </div>
 </template>
 
@@ -125,6 +118,9 @@ export default {
 </script>
 
 <style scoped>
+.message-input {
+  background-color: #fff;
+}
 .text-input {
   width: 100%;
 }
@@ -133,27 +129,41 @@ export default {
 }
 
 .text-input {
-  display: flex;
-  border: 1px solid#E6E6E6;
+  height: 50px;
+  line-height: 50px;
+  border: none;
+  background: none;
+  outline: none;
   resize: none;
+  font-size: 15px;
 }
 
 .file-send-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid#E6E6E6;
-  background-color: white;
+  flex: 1;
+  border: none;
+  background: none;
   width: 50px;
+  height: 50px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+button.send-message {
+  flex: 1;
+  border: none;
+  background: none;
+  width: 80px;
+  height: 50px;
+  font-size: 16px;
   cursor: pointer;
 }
 
 .ghost-file-input-top {
-  position: fixed;
-  top: 160px;
+  position: absolute;
+  top: 100px;
   left: 0px;
   right: 0px;
-  bottom: -9999px;
+  bottom: 0;
   background-color: rgba(255, 0, 0, 0.1);
   text-indent: -9999px;
   z-index: 10;
@@ -161,11 +171,11 @@ export default {
 }
 
 .ghost-file-input-bottom {
-  position: fixed;
-  top: 110px;
-  left: 0px;
-  right: 0px;
-  bottom: -3390px;
+  position: absolute;
+  top: 100px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: rgba(255, 0, 0, 0.1);
   text-indent: -9999px;
   z-index: 10;

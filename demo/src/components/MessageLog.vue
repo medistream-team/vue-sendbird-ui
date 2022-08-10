@@ -1,37 +1,50 @@
+
+
 <template>
   <div class="message-log">
-    <div v-if="msg.length > 0">
-      <div
-        v-bind:class="[classValue ? 'chat-item me' : 'chat-item stranger']"
-        v-for="message in msg"
-        :key="message.messageId"
+    <div v-if="messages.length > 0">
+      <infinite-loading
+        v-if="sortDirection === 'bottom'"
+        direction="top"
+        @infinite="infiniteHandler"
       >
-        <p>{{ message.sender.nickname }}</p>
-
-        <div style="white-space: pre-wrap">{{ message.message }}</div>
-
-        <img
-          v-if="message.url && checkType(message.url.toString())"
-          class="file-img"
-          v-bind:src="message.url"
-        />
-
-        <img
-          v-if="message.url && !checkType(message.url.toString())"
-          class="file-file"
-          src="@/assets/file.png"
-        />
-        <a
-          v-if="message.url && !checkType(message.url.toString())"
-          class="file-filename"
-          :href="message.url"
+      </infinite-loading>
+      <div v-for="message in messages " :key="message.messageId">
+        <div
+          v-bind:class="[classValue ? 'chat-item me' : 'chat-item stranger']"
         >
-          {{ message.url }}
-        </a>
+          <p>{{ message.sender.nickname }}</p>
 
-        <p>{{ convertDate(message.createdAt) }}</p>
+          <div style="white-space: pre-wrap">{{ message.message }}</div>
+
+          <img
+            v-if="message.url && checkType(message.url.toString())"
+            class="file-img"
+            v-bind:src="message.url"
+          />
+
+          <img
+            v-if="message.url && !checkType(message.url.toString())"
+            class="file-file"
+            src="@/assets/file.png"
+          />
+          <a
+            v-if="message.url && !checkType(message.url.toString())"
+            class="file-filename"
+            :href="message.url"
+          >
+            {{ message.url }}
+          </a>
+
+          <p>{{ convertDate(message.createdAt) }}</p>
+        </div>
       </div>
-      <infinite-loading @infinite="infiniteHandler"> </infinite-loading>
+      <infinite-loading
+        v-if="sortDirection === 'top'"
+        direction="bottom"
+        @infinite="infiniteHandler"
+      >
+      </infinite-loading>
     </div>
   </div>
 </template>
@@ -74,6 +87,11 @@ export default {
       default: "nickname",
     },
   },
+  inject: {
+      config: {
+          themeColor: '#1d77ff'
+      }, 
+  },
   data() {
     return {
       messages: [],
@@ -81,7 +99,17 @@ export default {
       timestamp: 0,
     };
   },
-  inject: ["msg"],
+  created() {
+    return {
+      seperateChat() {
+        for (const eachMsg in this.messages) {
+          if (eachMsg._sender.nickname === this.nickname) {
+            console.log(this.nickname);
+          }
+        }
+      },
+    };
+  },
   methods: {
     convertDate(date) {
       return format(date, "yyyy-MM-dd HH:mm");
@@ -109,7 +137,7 @@ export default {
 
             this.loadMessage += 20;
             //const newItemList = this.messages.push(...res);
-            this.msg.push(...res);
+            this.messages.push(...res);
 
             $state.loaded();
           })
@@ -128,6 +156,9 @@ export default {
 </script>
 
 <style scoped>
+.message-log {
+  padding: 20px 15px;
+}
 .file-img {
   width: 150px;
 }

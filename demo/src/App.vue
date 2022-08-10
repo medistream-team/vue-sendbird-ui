@@ -1,6 +1,8 @@
 <template>
   <div id="app">
     <div class="about">
+      <h1>Vue Sendbird UI</h1>
+      <br><br>
       <button type="button" @click="toggleSortDirection">
         방향 토글하기 인 ({{ sortDirection }})
       </button>
@@ -30,6 +32,7 @@
 
     <message-widget
       class="preview"
+      theme-color="#1d77ff"
       :nickname="nickname"
       :channel="channel"
       :userId="userId"
@@ -97,14 +100,12 @@ export default {
   color: #2c3e50;
 }
 .preview {
-  overflow: auto;
   position: fixed;
   top: 50%;
   left: 75%;
   width: 600px;
   height: 800px;
-  background-color: #f5f5f5;
-  text-align: center;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3), 0 10px 30px 0 rgba(0, 0, 0, 0.1);
   transform: translate(-50%, -50%);
 }
 </style>
