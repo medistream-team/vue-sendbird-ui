@@ -136,7 +136,7 @@ export default {
 
             this.loadMessage += 20;
             //const newItemList = this.messages.push(...res);
-            this.messages.push(...res);
+            this.msg.push(...res);
 
             $state.loaded();
           })
