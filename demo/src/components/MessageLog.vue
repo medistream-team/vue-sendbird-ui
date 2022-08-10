@@ -1,9 +1,9 @@
 <template>
   <div class="message-log">
-    <div v-if="messages.length > 0">
+    <div v-if="msg.length > 0">
       <div
         v-bind:class="[classValue ? 'chat-item me' : 'chat-item stranger']"
-        v-for="message in messages"
+        v-for="message in msg"
         :key="message.messageId"
       >
         <p>{{ message.sender.nickname }}</p>
@@ -48,12 +48,12 @@
 import { format } from "date-fns";
 import InfiniteLoading from "vue-infinite-loading";
 import { SendbirdAction } from "@/sendbird/SendbirdAction";
-import { SendBirdEvent } from "@/sendbird/SendbirdEvent";
+
 export default {
   components: {
     InfiniteLoading,
   },
-  
+
   name: "MessageLog",
 
   props: {
@@ -81,6 +81,7 @@ export default {
       timestamp: 0,
     };
   },
+  inject: ["msg"],
   methods: {
     convertDate(date) {
       return format(date, "yyyy-MM-dd HH:mm");
@@ -108,7 +109,7 @@ export default {
 
             this.loadMessage += 20;
             //const newItemList = this.messages.push(...res);
-            this.messages.push(...res);
+            this.msg.push(...res);
 
             $state.loaded();
           })
@@ -123,34 +124,6 @@ export default {
   // if (this.nickname === this.messages[0]._sender.nickname) {
   //    console.log("dd");
   //  }
-
-  async created() {
-    const sendbirdAction = SendbirdAction.getInstance();
-    const error = await sendbirdAction.init(
-      "김인태",
-      "김인태",
-      "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
-    );
-
-    if (!error) {
-      sendbirdAction.getMessageList(this.loadMessage).then((response) => {
-        this.messages = response;
-        if (this.messages.length > 0) {
-          this.showInfiniteLoadingIndicator = true;
-        }
-      });
-
-      const channelEvent = new SendBirdEvent();
-
-      channelEvent.onMessageReceived((message) => {
-        this.messages = [message].concat(this.messages);
-      });
-
-      channelEvent.onMessageReceived((file) => {
-        this.messages = [file].concat(this.messages);
-      });
-    }
-  },
 };
 </script>
 

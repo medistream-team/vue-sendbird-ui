@@ -120,6 +120,7 @@ class SendbirdAction {
 
         const params = new this.sb.MessageListParams();
         params.prevResultSize = loadMessage;
+        params.reverse = true;
         this.channel.getMessagesByTimestamp(
           Date.now(),
           params,
