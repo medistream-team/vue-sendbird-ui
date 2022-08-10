@@ -1,7 +1,5 @@
 <template>
   <div class="chat-container">
-    <!-- <header-bar></header-bar> -->
-    <!--file-import @fileSelect="addInputFile"></file-import> -->
 
     <message-header></message-header>
   
