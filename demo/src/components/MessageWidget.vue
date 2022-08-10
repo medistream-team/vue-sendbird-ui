@@ -1,15 +1,17 @@
 <template>
-  <div class="message-widget">
+  <div class="message-widget" :class="{
+    'sort-top': sortDirection === 'top',
+    'sort-bottom': sortDirection === 'bottom',
+  }">
 
     <message-header :user-id="userId"></message-header>
 
     <message-input
       @addInputMessage="addInputMessage"
-      @addInputFile="addInputFile"
-      v-if="sortDirection === 'top'"
-    >
-      <!-- channel Id가 없을 때 페이지를 만들어보자!-->
+      @addInputFile="addInputFile">
     </message-input>
+
+    <!-- TODO: channel Id가 없을 때 페이지를 만들어보자!-->
 
     <message-log
       v-model="message"
@@ -20,12 +22,6 @@
     >
     </message-log>
 
-    <message-input
-      @addInputMessage="addInputMessage"
-      @addInputFile="addInputFile"
-      v-if="sortDirection === 'bottom'"
-    >
-    </message-input>
   </div>
 </template>
 
@@ -164,17 +160,30 @@ export default {
 }
 .message-input {
   position: absolute;
-  top: 50px;
   right: 0;
   left: 0;
   height: 50px;
 }
+.sort-top .message-input {
+  top: 50px;
+  bottom: auto;
+}
+.sort-bottom .message-input {
+  top: auto;
+  bottom: 0;
+}
 .message-log {
   overflow: auto;
   position: absolute;
-  top: 100px;
   right: 0;
-  bottom: 0;
   left: 0;
+}
+.sort-top .message-log {
+  top: 100px;
+  bottom: 0;
+}
+.sort-bottom .message-log {
+  top: 50px;
+  bottom: 50px;
 }
 </style>
