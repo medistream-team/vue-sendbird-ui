@@ -1,7 +1,7 @@
 <template>
-  <div class="chat-container">
+  <div class="message-widget">
 
-    <message-header></message-header>
+    <message-header :user-id="userId"></message-header>
 
     <message-input
       @addInputMessage="addInputMessage"
@@ -148,4 +148,33 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.message-widget {
+  position: relative;
+  min-width: 320px;
+  min-height: 480px;
+  background-color: rgba(150, 150, 150, 0.1);
+}
+.message-header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 50px;
+}
+.message-input {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  left: 0;
+  height: 50px;
+}
+.message-log {
+  overflow: auto;
+  position: absolute;
+  top: 100px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+</style>

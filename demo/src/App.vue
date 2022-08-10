@@ -98,14 +98,11 @@ export default {
   color: #2c3e50;
 }
 .preview {
-  overflow: auto;
   position: fixed;
   top: 50%;
   left: 75%;
   width: 600px;
   height: 800px;
-  background-color: #f5f5f5;
-  text-align: center;
   transform: translate(-50%, -50%);
 }
 </style>

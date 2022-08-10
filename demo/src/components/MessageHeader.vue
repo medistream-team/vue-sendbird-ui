@@ -1,21 +1,33 @@
 <template>
-  <div class="header-container">
-    <p>🕳user</p>
-    <div class="glass-container">
-      <i class="ii ii-search" @click="modalClick"></i>
-      <input
-        class="search"
-        type="text"
-        v-model="filteringText"
-        v-bind:class="search"
-      />
+  <div class="message-header">
+    <div
+      v-if="!searchVisible"
+      class="bar">
+      <p class="title">{{ userId }}</p>
+      <div class="tools left">
+        <!-- <button type="button" title="뒤로가기">
+          <i class="ii ii-arrow-left"></i>
+        </button> -->
+      </div>
+      <div class="tools right" title="검색">
+        <button type="button" @click="searchVisible = true">
+          <i class="ii ii-search"></i>
+        </button>
+      </div>
     </div>
-
-    <p>{{ filteringText }}</p>
-
-    <!-- {{ filteringText | messageFilter }}-->
-
-    <div></div>
+    <!-- 검색 -->
+    <div
+      v-if="searchVisible"
+      class="tool-search">
+      <input
+        ref="search"
+        type="search"
+        v-model="searchKeyword"
+        placeholder="메시지 내용 검색">
+      <button type="button" @click="searchVisible = false">
+        <i class="ii ii-remove"></i>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -23,70 +35,91 @@
 import "inticons/fonts/inticons.bundle.min.css";
 
 export default {
-  components: {},
-  inject: {
-      config: {
-          sortDirection: 'top'
-      }
+  props: {
+    userId: {
+      type: String
+    }
   },
   data() {
     return {
-      filteringText: "",
-      test: "",
-      search: "searchoff",
-      modal: true,
+      searchKeyword: '',
+      searchVisible: false,
     };
   },
-  methods: {
-    modalClick() {
-      if (this.modal) {
-        this.search = "searchon";
-        this.modal = !this.modal;
-      } else {
-        this.search = "searchoff";
-        this.modal = !this.modal;
-      }
-    },
-  },
-  computed: {},
 };
 </script>
 
-<style scope>
-.header-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+<style scoped>
+.message-header {
+  position: relative;
   height: 50px;
-  background-color: coral;
+  background-color: #e9e9e9;
 }
-.header-container p {
-  margin-left: 20px;
+.message-header .title {
+  margin: 0;
+  line-height: 50px;
+  text-align: center;
 }
-.glass-container {
-  position: relative;
-  display: flex;
-  min-width: 200px;
-}
-.glass-container input {
-  position: relative;
-  transition: all 0.3s ease-in-out;
-  z-index: 1;
-}
-.glass-container i {
+.message-header .tools.left {
   position: absolute;
-  left: 10px;
-  top: 50%;
-  margin-top: -8px;
+  top: 0;
+  left: 0;
+  text-align: left;
+}
+.message-header .tools.right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-align: right;
+}
+.message-header .tools button {
+  min-width: 50px;
+  height: 50px;
+  border: none;
+  background: none;
+  font-size: 22px;
   cursor: pointer;
-  z-index: 2;
 }
-.searchoff {
+.tool-search {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  left: 15px;
+}
+.tool-search input[type=text]::-ms-clear {
+  display: none;
+  width : 0;
+  height: 0;
+}
+.tool-search input[type=text]::-ms-reveal {
+  display: none;
   width: 0;
-  opacity: 0;
+  height: 0;
 }
-.searchon {
+.tool-search input[type="search"]::-webkit-search-decoration,
+.tool-search input[type="search"]::-webkit-search-cancel-button,
+.tool-search input[type="search"]::-webkit-search-results-button,
+.tool-search input[type="search"]::-webkit-search-results-decoration {
+  display: none;
+}
+.tool-search input {
   width: 100%;
-  opacity: 1;
+  height: 30px;
+  border: none;
+  border-bottom: 1px solid rgba(150, 150, 150, 0.2);
+  background: none;
+  outline: none;
+  font-size: 15px;
+}
+.tool-search button {
+  position: absolute;
+  top: -10px;
+  right: -15px;
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: none;
+  font-size: 22px;
+  cursor: pointer;
 }
 </style>

@@ -145,6 +145,9 @@ export default {
 </script>
 
 <style scoped>
+.message-log {
+  padding: 20px 15px;
+}
 .file-img {
   width: 150px;
 }
