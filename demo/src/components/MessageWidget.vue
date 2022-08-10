@@ -57,6 +57,10 @@ export default {
 },
 
   props: {
+    themeColor: {
+      type: String,
+      default: '#1d77ff'
+    },
     sortDirection: {
       type: String,
       default: "top",
@@ -90,6 +94,19 @@ export default {
         "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c",
       loadMessage: 20,
     };
+  },
+
+  provide () {
+      const config = {}
+      Object.defineProperty(config, 'themeColor', {
+          enumerable: true,
+          get: () => this.themeColor,
+      })
+      Object.defineProperty(config, 'sortDirection', {
+          enumerable: true,
+          get: () => this.sortDirection,
+      })
+      return { config }
   },
 
   //toggle button들 만들기

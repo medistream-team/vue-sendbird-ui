@@ -59,6 +59,11 @@ export default {
       default: "nickname",
     },
   },
+  inject: {
+      config: {
+          themeColor: '#1d77ff'
+      }
+  },
   data() {
     return {
       messages: [],

@@ -24,6 +24,11 @@ import "inticons/fonts/inticons.bundle.min.css";
 
 export default {
   components: {},
+  inject: {
+      config: {
+          sortDirection: 'top'
+      }
+  },
   data() {
     return {
       filteringText: "",

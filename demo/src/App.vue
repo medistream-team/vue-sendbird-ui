@@ -34,6 +34,7 @@
 
     <message-widget
       class="preview"
+      theme-color="#1d77ff"
       :nickname="nickname"
       :channel="channel"
       :userId="userId"
