@@ -29,7 +29,7 @@
 
     <!-- <button class="send-message" @click="sendMessage">보내기</button> -->
 
-    <FileImport @customChange="handleFilesUpload" ref="fileSelect"></FileImport>
+    <FileImport class = "filepond" @customChange="handleFilesUpload" ref="fileSelect"></FileImport>
 
     <input
       type="file"
@@ -183,5 +183,9 @@ button.send-message {
 
 .file-send-button:hover {
   background-color: #e2e2e2;
+}
+
+.filepond {
+  display: none;
 }
 </style>

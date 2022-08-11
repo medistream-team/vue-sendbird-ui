@@ -27,23 +27,27 @@
     </div>
 
     <message-widget
+      ref="msgWidget"
       class="preview"
       theme-color="#1d77ff"
       :nickname="nickname"
       :channel="channel"
       :userId="userId"
       :sort-direction="sortDirection"
+      v-if = "test"
     ></message-widget>
   </div>
 </template>
 
 <script>
 import MessageWidget from "./components/MessageWidget.vue";
+//import { SendbirdAction } from "@/sendbird/SendbirdAction";
+
 
 export default {
   name: "App",
   components: {
-    MessageWidget,
+   MessageWidget ,
   },
 
   data() {
@@ -53,10 +57,17 @@ export default {
       userId: "user1Id",
       channel:
         "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed",
+      test: true, 
     };
   },
 
   methods: {
+
+    timeout: function() {
+      setTimeout(this.test= false, 2000)
+      setTimeout(this.test= true, 2000)
+    },
+
     toggleSortDirection: function () {
       this.sortDirection = this.sortDirection === "top" ? "bottom" : "top";
     },
@@ -66,6 +77,7 @@ export default {
       this.nickname =
       this.nickname === "user1" ? "user2" : "user1";
       this.userId = this.userId === "user2Id" ? "user1Id" : "user2Id";
+       
     },
 
     toggleChannel() {
@@ -74,8 +86,20 @@ export default {
         "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed"
           ? "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
           : "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed";
+      //this.timeout();
+      //this.$refs.msgWidget.created();
+      //SendbirdAction.getInstance()
+      //.init(this.userId, this.nickname, this.channel)
+       //this.$refs.msgWidget.created();
+       console.log(this.channel);
+       this.$refs.msgWidget.created();
+
+       
     },
+    
   },
+
+
 };
 </script>
 

@@ -109,40 +109,8 @@ export default {
   },
 
 
-// 하나씩 되야하는데 전체가 된다. 
-computed:{
-
-
-  
-  /*
-  for (let i = 0; i < this.msg.length; i++) {
-    if (this.msg[3]._sender.nickname === this.nickname) {
-        toReturn = true;
-    } else {
-      toReturn = false;
-    }
-  }
-  return toReturn;
-  }
-  */
-
-  /*
-   for (const eachMsg in this.msg) {
-      if (eachMsg._sender.nickname !== this.nickname) {
-        toReturn = false;
-      } else {
-        toReturn = true;
-      }
-      }
-      return toReturn;
-   }
-   */
-  },
-
   methods: {
     convertDate(date) {
-      console.log("1", this.msg[0]._sender.nickname)
-      console.log("2", this.nickname)
       return format(date, "yyyy-MM-dd HH:mm");
     },
 
@@ -165,8 +133,6 @@ computed:{
         sendbirdAction
           .getMessageList(this.loadMessage)
           .then((res) => {
-            console.log(res);
-
             this.loadMessage += 20;
             //const newItemList = this.messages.push(...res);
             this.msg.push(...res);
@@ -214,13 +180,13 @@ computed:{
 
 .me {
   float: right;
-  margin-left: 15px;
+  margin-left: 20px;
   background: #fef01b;
 }
 
 .stranger {
   float: left;
-  margin-right: 15px;
+  margin-right: 20px;
   background: white;
 }
 </style>
