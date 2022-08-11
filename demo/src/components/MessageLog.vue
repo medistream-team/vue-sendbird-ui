@@ -16,7 +16,10 @@
         <div
           v-for="message in msg" :key= "message.messageId" :class="[ msg[0]._sender.nickname === message.sender.nickname ? 'chat-item me' : 'chat-item stranger']"
         >
-          <p>{{ message.sender.nickname }}</p>
+
+          <p v-if="message.sender.userId !== userId" class="nickname">
+            {{ message.sender.nickname }}
+          </p>
 
           <div style="white-space: pre-wrap">{{ message.message }}</div>
 
@@ -39,7 +42,7 @@
             {{ message.url }}
           </a>
 
-          <p>{{ convertDate(message.createdAt) }}</p>
+          <time>{{ convertDate(message.createdAt) }}</time>
         </div>
       </div>
       <infinite-loading
@@ -172,10 +175,22 @@ export default {
 .chat-item {
   position: relative;
   width: 200px;
-  padding: 20px;
+  padding: 15px;
   margin-bottom: 20px;
   border-radius: 15px;
   list-style-type: none;
+}
+
+.chat-item .nickname {
+  margin: 0 0 10px;
+  font-weight: bold;
+}
+
+.chat-item time {
+  display: block;
+  opacity: 0.5;
+  margin: 10px 0 0;
+  font-size: 12px;
 }
 
 .me {
