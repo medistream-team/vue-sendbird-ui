@@ -14,7 +14,7 @@
       <div v-for="message in msg" :key="message.messageId">
 
         <div
-          v-bind:class="[classValue ? 'chat-item me' : 'chat-item stranger']"
+          v-for="message in msg" :key= "message.messageId" :class="[ msg[0]._sender.nickname === message.sender.nickname ? 'chat-item me' : 'chat-item stranger']"
         >
           <p>{{ message.sender.nickname }}</p>
 
@@ -109,10 +109,43 @@ export default {
   },
 
 
+// 하나씩 되야하는데 전체가 된다. 
+computed:{
+
+
+  
+  /*
+  for (let i = 0; i < this.msg.length; i++) {
+    if (this.msg[3]._sender.nickname === this.nickname) {
+        toReturn = true;
+    } else {
+      toReturn = false;
+    }
+  }
+  return toReturn;
+  }
+  */
+
+  /*
+   for (const eachMsg in this.msg) {
+      if (eachMsg._sender.nickname !== this.nickname) {
+        toReturn = false;
+      } else {
+        toReturn = true;
+      }
+      }
+      return toReturn;
+   }
+   */
+  },
+
   methods: {
     convertDate(date) {
+      console.log("1", this.msg[0]._sender.nickname)
+      console.log("2", this.nickname)
       return format(date, "yyyy-MM-dd HH:mm");
     },
+
     checkType(fileUrl) {
       if (
         fileUrl.includes("jpeg") ||
@@ -172,7 +205,7 @@ export default {
 
 .chat-item {
   position: relative;
-  width: 250px;
+  width: 200px;
   padding: 20px;
   margin-bottom: 20px;
   border-radius: 15px;
@@ -181,13 +214,13 @@ export default {
 
 .me {
   float: right;
-  margin-left: 30px;
+  margin-left: 15px;
   background: #fef01b;
 }
 
 .stranger {
   float: left;
-  margin-right: 30px;
+  margin-right: 15px;
   background: white;
 }
 </style>

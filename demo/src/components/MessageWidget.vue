@@ -149,8 +149,8 @@ export default {
   async created() {
     const sendbirdAction = SendbirdAction.getInstance();
     const error = await sendbirdAction.init(
-      "김인태",
-      "김인태",
+      "admin",
+      "user1",
       "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
     );
 

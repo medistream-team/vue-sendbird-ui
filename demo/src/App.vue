@@ -8,15 +8,11 @@
       </button>
       <div>
         <p>userId toggle</p>
-        <button class="toggle_user1" @click="toggleUserId">
-          toggle {{ userId }}
+        <button class="toggle_user1" @click="toggleUser">
+          toggle {{ userId }} {{nickname}}
         </button>
       </div>
       <div>
-        <p>nickname toggle</p>
-        <button class="toggle_user1" @click="toggleNickname">
-          toggle {{ nickname }}
-        </button>
         <div>
           <p>channel toggle</p>
           <button class="toggle_channel" @click="toggleChannel">
@@ -54,7 +50,7 @@ export default {
     return {
       sortDirection: "top",
       nickname: "user1",
-      userId: "admin",
+      userId: "user1Id",
       channel:
         "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed",
     };
@@ -64,13 +60,12 @@ export default {
     toggleSortDirection: function () {
       this.sortDirection = this.sortDirection === "top" ? "bottom" : "top";
     },
-    toggleUserId() {
-      this.userId = this.userId === "admin" ? "김인태" : "admin";
-    },
 
-    toggleNickname() {
+
+    toggleUser() {
       this.nickname =
-        this.nickname === "nickname" ? "another_nickname" : "nickname";
+      this.nickname === "user1" ? "user2" : "user1";
+      this.userId = this.userId === "user2Id" ? "user1Id" : "user2Id";
     },
 
     toggleChannel() {
@@ -100,8 +95,8 @@ export default {
   position: fixed;
   top: 50%;
   left: 75%;
-  width: 600px;
-  height: 800px;
+  width: 360px;
+  height: 80%;
   box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3), 0 10px 30px 0 rgba(0, 0, 0, 0.1);
   transform: translate(-50%, -50%);
 }
