@@ -14,7 +14,14 @@
       <div v-for="message in msg" :key="message.messageId">
 
         <div
-          v-for="message in msg" :key= "message.messageId" :class="[ msg[0]._sender.nickname === message.sender.nickname ? 'chat-item me' : 'chat-item stranger']"
+          v-for="message in msg"
+          :key="message.messageId"
+          class="chat-item"
+          :class="[ msg[0]._sender.nickname === message.sender.nickname ? 'me' : 'stranger']"
+          :style="{
+            'background-color': (msg[0]._sender.nickname === message.sender.nickname ? config.themeColor : ''),
+            'color': (msg[0]._sender.nickname === message.sender.nickname && config.themeColor === '#1d77ff' ? '#fff' : '')
+          }"
         >
 
           <p v-if="message.sender.userId !== userId" class="nickname">
@@ -196,7 +203,7 @@ export default {
 .me {
   float: right;
   margin-left: 20px;
-  background: #fef01b;
+  background: white;
 }
 
 .stranger {
