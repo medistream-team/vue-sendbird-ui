@@ -23,7 +23,6 @@ class SendbirdAction {
       this.channel = await this.getChannel(channel);
       await this.join();
       this.previousMessageQuery = this.channel.createPreviousMessageListQuery();
-
       this.previousMessageQuery.reverse = true;
     } catch (e) {
       error = e;

@@ -1,14 +1,20 @@
 <template>
-  <div class="message-widget" :class="{
-    'sort-top': sortDirection === 'top',
-    'sort-bottom': sortDirection === 'bottom',
-  }">
-
-    <message-header :user-id="userId"></message-header>
+  <div
+    class="message-widget"
+    :class="{
+      'sort-top': sortDirection === 'top',
+      'sort-bottom': sortDirection === 'bottom',
+    }"
+  >
+    <message-header
+      v-on:searching="checkEve"
+      :user-id="userId"
+    ></message-header>
 
     <message-input
       @addInputMessage="addInputMessage"
-      @addInputFile="addInputFile">
+      @addInputFile="addInputFile"
+    >
     </message-input>
 
     <!-- TODO: channel Id가 없을 때 페이지를 만들어보자!-->
@@ -19,9 +25,9 @@
       :userId="userId"
       :classValue="classValue"
       :sort-direction="sortDirection"
+      :searchKeyword="searchKeyword"
     >
     </message-log>
-
   </div>
 </template>
 
@@ -32,7 +38,6 @@ import MessageHeader from "./MessageHeader.vue";
 import { SendbirdAction } from "@/sendbird/SendbirdAction";
 import { SendBirdEvent } from "@/sendbird/SendbirdEvent";
 import { computed } from "vue";
-
 export default {
   name: "MessageWidget",
   components: {
@@ -44,7 +49,7 @@ export default {
   props: {
     themeColor: {
       type: String,
-      default: '#1d77ff'
+      default: "#1d77ff",
     },
     sortDirection: {
       type: String,
@@ -77,26 +82,28 @@ export default {
       channel2:
         "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c",
       loadMessage: 20,
-
+      searchKeyword: "",
       messages: [],
     };
   },
 
-  provide () {
-      const config = {}
-      Object.defineProperty(config, 'themeColor', {
-          enumerable: true,
-          get: () => this.themeColor,
-      })
-      Object.defineProperty(config, 'sortDirection', {
-          enumerable: true,
-          get: () => this.sortDirection,
-      })
-      return { config , msg: computed(() => {
+  provide() {
+    const config = {};
+    Object.defineProperty(config, "themeColor", {
+      enumerable: true,
+      get: () => this.themeColor,
+    });
+    Object.defineProperty(config, "sortDirection", {
+      enumerable: true,
+      get: () => this.sortDirection,
+    });
+    return {
+      config,
+      msg: computed(() => {
         return this.messages;
-      })}
+      }),
+    };
   },
-
 
   //toggle button들 만들기
   watch: {
@@ -123,22 +130,31 @@ export default {
     channel: {
       handler: function () {
         const sendbirdAction = SendbirdAction.getInstance();
-
-        if (this.channel !== this.channel) {
-          sendbirdAction.init(this.userId, this.nickname, this.channel);
-          sendbirdAction.getMessageList(this.loadMessage);
+        console.log("d");
+        if (this.channel === this.channel) {
+          setTimeout(() => {
+            console.log("ddd");
+            sendbirdAction.init(this.userId, this.nickname, this.channel);
+            sendbirdAction.getMessageList(this.loadMessage);
+          }, 1000);
         } else {
-          sendbirdAction.init(this.userId, this.nickname, this.channel);
-          sendbirdAction.getMessageList(this.loadMessage);
+          setTimeout(() => {
+            sendbirdAction.init(this.userId, this.nickname, this.channel);
+            sendbirdAction.getMessageList(this.loadMessage);
+          }, 1000);
         }
       },
     },
   },
 
   methods: {
+    checkEve(searchKeyword) {
+      this.searchKeyword = searchKeyword;
+    },
     addInputMessage: function (message) {
-      this.messages = [message].concat(this.messages);
-      console.log(this.messages);
+      if (this.sortDirection === "top") {
+        this.messages = [message].concat(this.messages);
+      }
     },
 
     addInputFile: function (file) {

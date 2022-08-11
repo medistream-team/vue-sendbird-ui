@@ -2,7 +2,7 @@
   <div id="app">
     <div class="about">
       <h1>Vue Sendbird UI</h1>
-      <br><br>
+      <br /><br />
       <button type="button" @click="toggleSortDirection">
         방향 토글하기 인 ({{ sortDirection }})
       </button>

@@ -1,9 +1,6 @@
-
 <template>
   <div class="message-log">
-
     <div v-if="msg.length > 0">
-
       <infinite-loading
         v-if="sortDirection === 'bottom'"
         direction="top"
@@ -11,14 +8,19 @@
       >
       </infinite-loading>
 
-      <div v-for="message in msg" :key="message.messageId">
-
+      <div v-for="message in searching" :key="message.messageId">
         <div
-          v-bind:class="[classValue ? 'chat-item me' : 'chat-item stranger']"
+          :class="[
+            searching[0]._sender.nickname === message.sender.nickname
+              ? 'chat-item me'
+              : 'chat-item stranger',
+          ]"
         >
           <p>{{ message.sender.nickname }}</p>
 
-          <div style="white-space: pre-wrap">{{ message.message }}</div>
+          <div style="white-space: pre-wrap">
+            {{ message.message }}
+          </div>
 
           <img
             v-if="message.url && checkType(message.url.toString())"
@@ -89,16 +91,17 @@ export default {
       type: String,
       default: "nickname",
     },
+    searchKeyword: {
+      type: String,
+    },
   },
- 
- 
+
   inject: {
-      config: {
-          themeColor: '#1d77ff'
-      }, 
-      msg: "msg"
+    config: {
+      themeColor: "#1d77ff",
+    },
+    msg: "msg",
   },
-  
 
   data() {
     return {
@@ -107,7 +110,15 @@ export default {
       timestamp: 0,
     };
   },
-
+  computed: {
+    searching() {
+      return this.msg.filter((message) => {
+        return message.message
+          .toLowerCase()
+          .includes(this.searchKeyword.toLowerCase());
+      });
+    },
+  },
 
   methods: {
     convertDate(date) {
