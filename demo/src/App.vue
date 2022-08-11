@@ -93,7 +93,9 @@ export default {
        //this.$refs.msgWidget.created();
        console.log(this.channel);
        this.$refs.msgWidget.created();
-
+        this.nickname =
+        this.nickname === "user1" ? "user1" : "user2";
+        this.userId = this.userId === "user2Id" ? "user2Id" : "user1Id"
        
     },
     

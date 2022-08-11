@@ -52,18 +52,18 @@ export default {
     },
     userId: {
       type: String,
-      default: "admin",
+      //default: "admin",
     },
 
     nickname: {
       type: String,
-      default: "user1",
+      //default: "user1",
     },
 
     channel: {
       type: String,
-      default:
-        "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed",
+      //default:
+      //  "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed",
     },
   },
 
@@ -129,10 +129,8 @@ export default {
    channel: {
       handler: function () {
         const sendbirdAction = SendbirdAction.getInstance();
-        console.log("d");
         if (this.channel === this.channel) {
           setTimeout(() => {
-            console.log("ddd");
             sendbirdAction.init(this.userId, this.nickname, this.channel);
             sendbirdAction.getMessageList(this.loadMessage);
           }, 1000);
@@ -148,11 +146,9 @@ export default {
   methods: {
     addInputMessage: function (message) {
       this.messages = [message].concat(this.messages);
-      console.log(this.messages);
     },
 
     addInputFile: function (file) {
-      console.log("hi", file.url);
       this.messages = [file].concat(this.messages);
     },
 
