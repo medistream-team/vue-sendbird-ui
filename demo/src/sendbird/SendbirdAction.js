@@ -109,8 +109,18 @@ class SendbirdAction {
         this.previousMessageQuery.hasMore &&
         !this.previousMessageQuery.isLoading
       ) {
+        // this.previousMessageQuery.load(
+        //   loadMessage,
+        //   true,
+        //   (messageList, error) => {
+        //     const response = messageList;
+        //     error ? reject(error) : resolve(response);
+        //   }
+        // );
+
         const params = new this.sb.MessageListParams();
         params.prevResultSize = loadMessage;
+        params.reverse = true;
         this.channel.getMessagesByTimestamp(
           Date.now(),
           params,

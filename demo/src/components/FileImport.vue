@@ -92,7 +92,7 @@ export default {
 
 .filepond--drop-label {
   background-color: #f5f5f5;
-  width: 10px;
+  width: 5px;
 }
 
 .filepond--root .filepond--drop-label {

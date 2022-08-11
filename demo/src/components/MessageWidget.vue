@@ -14,7 +14,7 @@
     <!-- TODO: channel Id가 없을 때 페이지를 만들어보자!-->
 
     <message-log
-      v-model="message"
+      v-model="messages"
       :nickname="nickname"
       :userId="userId"
       :classValue="classValue"
@@ -29,11 +29,9 @@
 import MessageInput from "@/components/MessageInput";
 import MessageLog from "@/components/MessageLog";
 import MessageHeader from "./MessageHeader.vue";
-
-//import FileImport from "@/components/FileImport";
-//import InfiniteLoading from "vue-infinite-loading";
-
 import { SendbirdAction } from "@/sendbird/SendbirdAction";
+import { SendBirdEvent } from "@/sendbird/SendbirdEvent";
+import { computed } from "vue";
 
 export default {
   name: "MessageWidget",
@@ -54,18 +52,18 @@ export default {
     },
     userId: {
       type: String,
-      default: "admin",
+      //default: "admin",
     },
 
     nickname: {
       type: String,
-      default: "nickname",
+      //default: "user1",
     },
 
     channel: {
       type: String,
-      default:
-        "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c",
+      //default:
+      //  "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed",
     },
   },
 
@@ -79,7 +77,13 @@ export default {
       channel2:
         "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c",
       loadMessage: 20,
+
       messages: [],
+      //newChannel: this.channel,
+      //userId: "admin",
+      //nickname: "user1",
+      //channel: "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
+
     };
   },
 
@@ -93,14 +97,17 @@ export default {
           enumerable: true,
           get: () => this.sortDirection,
       })
-      return { config }
+      return { config , msg: computed(() => {
+        return this.messages;
+      })}
   },
+
 
   //toggle button들 만들기
   watch: {
     sortDirection: {
       handler: function (value) {
-        if (value !== "top") {
+        if (value === "top") {
           this.messages.reverse();
         } else {
           this.messages.reverse();
@@ -117,21 +124,25 @@ export default {
         }
       },
     },
+  },
 
-    channel: {
+   channel: {
       handler: function () {
         const sendbirdAction = SendbirdAction.getInstance();
-
-        if (this.channel !== this.channel) {
-          sendbirdAction.init(this.userId, this.nickname, this.channel);
-          sendbirdAction.getMessageList(this.loadMessage);
+        if (this.channel === this.channel) {
+          setTimeout(() => {
+            sendbirdAction.init(this.userId, this.nickname, this.channel);
+            sendbirdAction.getMessageList(this.loadMessage);
+          }, 1000);
         } else {
-          sendbirdAction.init(this.userId, this.nickname, this.channel);
-          sendbirdAction.getMessageList(this.loadMessage);
+          setTimeout(() => {
+            sendbirdAction.init(this.userId, this.nickname, this.channel);
+            sendbirdAction.getMessageList(this.loadMessage);
+          }, 1000);
         }
       },
     },
-  },
+
   methods: {
     addInputMessage: function (message) {
       this.messages = [message].concat(this.messages);
@@ -140,7 +151,72 @@ export default {
     addInputFile: function (file) {
       this.messages = [file].concat(this.messages);
     },
+
+  async created() {
+    const sendbirdAction = SendbirdAction.getInstance();
+    const error = await sendbirdAction.init(
+      this.userId,
+      this.nickname,
+      //"sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
+      this.channel
+    );
+
+    if (!error) {
+      sendbirdAction.getMessageList(this.loadMessage).then((response) => {
+        this.messages = response;
+        if (this.messages.length > 0) {
+          this.showInfiniteLoadingIndicator = true;
+        }
+      });
+
+      const channelEvent = new SendBirdEvent();
+
+      channelEvent.onMessageReceived((message) => {
+        this.messages = [message].concat(this.messages);
+      });
+
+      channelEvent.onMessageReceived((file) => {
+        this.messages = [file].concat(this.messages);
+      });
+    }
   },
+  },
+/*
+  updateChannel: function() {
+    this.$emit("update-channel", this.channel)
+  },
+
+  */
+
+  async created() {
+    const sendbirdAction = SendbirdAction.getInstance();
+    const error = await sendbirdAction.init(
+      this.userId,
+      this.nickname,
+      //"sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
+      this.channel
+    );
+
+    if (!error) {
+      sendbirdAction.getMessageList(this.loadMessage).then((response) => {
+        this.messages = response;
+        if (this.messages.length > 0) {
+          this.showInfiniteLoadingIndicator = true;
+        }
+      });
+
+      const channelEvent = new SendBirdEvent();
+
+      channelEvent.onMessageReceived((message) => {
+        this.messages = [message].concat(this.messages);
+      });
+
+      channelEvent.onMessageReceived((file) => {
+        this.messages = [file].concat(this.messages);
+      });
+    }
+  },
+  
 };
 </script>
 

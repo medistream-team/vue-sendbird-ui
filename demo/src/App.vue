@@ -8,15 +8,11 @@
       </button>
       <div>
         <p>userId toggle</p>
-        <button class="toggle_user1" @click="toggleUserId">
-          toggle {{ userId }}
+        <button class="toggle_user1" @click="toggleUser">
+          toggle {{ userId }} {{nickname}}
         </button>
       </div>
       <div>
-        <p>nickname toggle</p>
-        <button class="toggle_user1" @click="toggleNickname">
-          toggle {{ nickname }}
-        </button>
         <div>
           <p>channel toggle</p>
           <button class="toggle_channel" @click="toggleChannel">
@@ -31,49 +27,57 @@
     </div>
 
     <message-widget
+      ref="msgWidget"
       class="preview"
       theme-color="#1d77ff"
       :nickname="nickname"
       :channel="channel"
       :userId="userId"
       :sort-direction="sortDirection"
+      v-if = "test"
     ></message-widget>
   </div>
 </template>
 
 <script>
 import MessageWidget from "./components/MessageWidget.vue";
+//import { SendbirdAction } from "@/sendbird/SendbirdAction";
+
 
 export default {
   name: "App",
   components: {
-    MessageWidget,
+   MessageWidget ,
   },
 
   data() {
     return {
-      page: 1,
-      list: [],
       sortDirection: "top",
       nickname: "user1",
-      userId: "admin",
-      //userId를 배열로 만들 수 있는 방법이 없을까?
+      userId: "user1Id",
       channel:
         "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed",
+      test: true, 
     };
   },
 
   methods: {
+
+    timeout: function() {
+      setTimeout(this.test= false, 2000)
+      setTimeout(this.test= true, 2000)
+    },
+
     toggleSortDirection: function () {
       this.sortDirection = this.sortDirection === "top" ? "bottom" : "top";
     },
-    toggleUserId() {
-      this.userId = this.userId === "admin" ? "김인태" : "admin";
-    },
 
-    toggleNickname() {
+
+    toggleUser() {
       this.nickname =
-        this.nickname === "nickname" ? "another_nickname" : "nickname";
+      this.nickname === "user1" ? "user2" : "user1";
+      this.userId = this.userId === "user2Id" ? "user1Id" : "user2Id";
+       
     },
 
     toggleChannel() {
@@ -82,8 +86,22 @@ export default {
         "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed"
           ? "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
           : "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed";
+      //this.timeout();
+      //this.$refs.msgWidget.created();
+      //SendbirdAction.getInstance()
+      //.init(this.userId, this.nickname, this.channel)
+       //this.$refs.msgWidget.created();
+       console.log(this.channel);
+       this.$refs.msgWidget.created();
+        this.nickname =
+        this.nickname === "user1" ? "user1" : "user2";
+        this.userId = this.userId === "user2Id" ? "user2Id" : "user1Id"
+       
     },
+    
   },
+
+
 };
 </script>
 
@@ -103,8 +121,8 @@ export default {
   position: fixed;
   top: 50%;
   left: 75%;
-  width: 600px;
-  height: 800px;
+  width: 360px;
+  height: 80%;
   box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.3), 0 10px 30px 0 rgba(0, 0, 0, 0.1);
   transform: translate(-50%, -50%);
 }

@@ -29,6 +29,8 @@
 
     <!-- <button class="send-message" @click="sendMessage">보내기</button> -->
 
+    <FileImport class = "filepond" @customChange="handleFilesUpload" ref="fileSelect"></FileImport>
+
     <input
       type="file"
       class="ghost-file-input-top"
@@ -37,7 +39,6 @@
       @click.prevent=""
     />
 
-    <FileImport @customChange="handleFilesUpload" ref="fileSelect"></FileImport>
    
   </div>
 </template>
@@ -55,7 +56,6 @@ export default {
       message: "",
       file: "",
       className: "",
-      //ghostFileInputVisible: true,
     };
   },
 
@@ -71,16 +71,8 @@ export default {
           this.message = "";
         });
     },
-    // handleMouseDown: function () {
-    //   document.querySelectorAll('.chat-container')[0].addEventListener('mouseenter', this.handleMouseMove);
-    // },
-    // handleMouseMove: function (event) {
-    //   console.log(event);
-    // },
 
     handleNativeFileInput: function (event) {
-      //let image = event.target.files[0];
-      //console.log(event.target.files[0].url);
       this.$refs.fileSelect.addDropFile(event.target.files[0]);
 
       //axios.post('http://localhost:3000/uploads', {image})
@@ -173,7 +165,6 @@ button.send-message {
   right: 0px;
   bottom: 0;
   background-color: rgba(255, 0, 0, 0.1);
-  text-indent: -9999px;
   z-index: 10;
   /* pointer-events: none; */
 }
@@ -192,5 +183,9 @@ button.send-message {
 
 .file-send-button:hover {
   background-color: #e2e2e2;
+}
+
+.filepond {
+  display: none;
 }
 </style>

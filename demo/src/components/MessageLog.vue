@@ -1,23 +1,53 @@
+
 <template>
   <div class="message-log">
-    <div v-if="messages.length > 0">
-      <div
-        v-bind:class="[classValue ? 'chat-item me' : 'chat-item stranger']"
-        v-for="message in messages"
-        :key="message.messageId"
+
+    <div v-if="msg.length > 0">
+
+      <infinite-loading
+        v-if="sortDirection === 'bottom'"
+        direction="top"
+        @infinite="infiniteHandler"
       >
-        <p>{{ message.sender.nickname }}</p>
+      </infinite-loading>
 
-        <div style="white-space: pre-wrap">{{ message.message }}</div>
+      <div v-for="message in msg" :key="message.messageId">
 
-        <img v-if="message.url && checkType(message.url.toString())" class="file-img" v-bind:src= message.url>
+        <div
+          v-for="message in msg" :key= "message.messageId" :class="[ msg[0]._sender.nickname === message.sender.nickname ? 'chat-item me' : 'chat-item stranger']"
+        >
+          <p>{{ message.sender.nickname }}</p>
 
-        <img v-if="message.url && !checkType(message.url.toString())" class="file-file" src= "@/assets/file.png">
-        <a v-if="message.url && !checkType(message.url.toString())" class="file-filename" :href="message.url"> {{message.url}} </a> 
-        
-        <p>{{ convertDate(message.createdAt) }}</p>
+          <div style="white-space: pre-wrap">{{ message.message }}</div>
+
+          <img
+            v-if="message.url && checkType(message.url.toString())"
+            class="file-img"
+            v-bind:src="message.url"
+          />
+
+          <img
+            v-if="message.url && !checkType(message.url.toString())"
+            class="file-file"
+            src="@/assets/file.png"
+          />
+          <a
+            v-if="message.url && !checkType(message.url.toString())"
+            class="file-filename"
+            :href="message.url"
+          >
+            {{ message.url }}
+          </a>
+
+          <p>{{ convertDate(message.createdAt) }}</p>
+        </div>
       </div>
-      <infinite-loading @infinite="infiniteHandler"> </infinite-loading>
+      <infinite-loading
+        v-if="sortDirection === 'top'"
+        direction="bottom"
+        @infinite="infiniteHandler"
+      >
+      </infinite-loading>
     </div>
   </div>
 </template>
@@ -34,12 +64,12 @@
 import { format } from "date-fns";
 import InfiniteLoading from "vue-infinite-loading";
 import { SendbirdAction } from "@/sendbird/SendbirdAction";
-import { SendBirdEvent } from "@/sendbird/SendbirdEvent";
+
 export default {
   components: {
     InfiniteLoading,
   },
-  
+
   name: "MessageLog",
 
   props: {
@@ -60,21 +90,30 @@ export default {
       default: "nickname",
     },
   },
+ 
+ 
   inject: {
       config: {
           themeColor: '#1d77ff'
-      }
+      }, 
+      msg: "msg"
   },
+  
+
   data() {
     return {
       messages: [],
-      loadMessage: 20,
+      loadMessage: 15,
+      timestamp: 0,
     };
   },
+
+
   methods: {
     convertDate(date) {
       return format(date, "yyyy-MM-dd HH:mm");
     },
+
     checkType(fileUrl) {
       if (
         fileUrl.includes("jpeg") ||
@@ -94,11 +133,9 @@ export default {
         sendbirdAction
           .getMessageList(this.loadMessage)
           .then((res) => {
-            console.log(res);
-
             this.loadMessage += 20;
             //const newItemList = this.messages.push(...res);
-            this.messages.push(...res);
+            this.msg.push(...res);
 
             $state.loaded();
           })
@@ -113,34 +150,6 @@ export default {
   // if (this.nickname === this.messages[0]._sender.nickname) {
   //    console.log("dd");
   //  }
-
-  async created() {
-    const sendbirdAction = SendbirdAction.getInstance();
-    const error = await sendbirdAction.init(
-      "김인태",
-      "김인태",
-      "sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
-    );
-
-    if (!error) {
-      sendbirdAction.getMessageList(this.loadMessage).then((response) => {
-        this.messages = response;
-        if (this.messages.length > 0) {
-          this.showInfiniteLoadingIndicator = true;
-        }
-      });
-
-      const channelEvent = new SendBirdEvent();
-
-      channelEvent.onMessageReceived((message) => {
-        this.messages = [message].concat(this.messages);
-      });
-
-      channelEvent.onMessageReceived((file) => {
-        this.messages = [file].concat(this.messages);
-      });
-    }
-  },
 };
 </script>
 
@@ -162,7 +171,7 @@ export default {
 
 .chat-item {
   position: relative;
-  width: 250px;
+  width: 200px;
   padding: 20px;
   margin-bottom: 20px;
   border-radius: 15px;
@@ -171,13 +180,13 @@ export default {
 
 .me {
   float: right;
-  margin-left: 30px;
+  margin-left: 20px;
   background: #fef01b;
 }
 
 .stranger {
   float: left;
-  margin-right: 30px;
+  margin-right: 20px;
   background: white;
 }
 </style>
