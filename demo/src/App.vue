@@ -153,19 +153,19 @@ export default {
     };
   },
   watch: {
-    userId(value) {
+    userId() {
       this.widgetStatus = false
       setTimeout(() => {
         this.widgetStatus = true
       }, 1)
     },
-    channel(value) {
+    channel() {
       this.widgetStatus = false
       setTimeout(() => {
         this.widgetStatus = true
       }, 1)
     },
-    sortDirection(value) {
+    sortDirection() {
       this.widgetStatus = false
       setTimeout(() => {
         this.widgetStatus = true
