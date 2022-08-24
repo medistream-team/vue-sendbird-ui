@@ -1,57 +1,61 @@
-
 <template>
   <div class="message-log">
-
     <div v-if="msg.length > 0">
-
       <infinite-loading
         v-if="sortDirection === 'bottom'"
         direction="top"
         @infinite="infiniteHandler"
       >
       </infinite-loading>
+      <div
+        v-for="message in msg"
+        :key="message.messageId"
+        class="chat-item"
+        :class="[
+          msg[0]._sender.nickname === message.sender.nickname
+            ? 'me'
+            : 'stranger',
+        ]"
+        :style="{
+          'background-color':
+            msg[0]._sender.nickname === message.sender.nickname
+              ? config.themeColor
+              : '',
+          color:
+            msg[0]._sender.nickname === message.sender.nickname &&
+            config.themeColor === '#1d77ff'
+              ? '#fff'
+              : '',
+        }"
+      >
+        <p v-if="message.sender.userId !== userId" class="nickname">
+          {{ message.sender.nickname }}
+        </p>
 
-      <div v-for="message in msg" :key="message.messageId">
+        <div style="white-space: pre-wrap">{{ message.message }}</div>
 
-        <div
-          v-for="message in msg"
-          :key="message.messageId"
-          class="chat-item"
-          :class="[ msg[0]._sender.nickname === message.sender.nickname ? 'me' : 'stranger']"
-          :style="{
-            'background-color': (msg[0]._sender.nickname === message.sender.nickname ? config.themeColor : ''),
-            'color': (msg[0]._sender.nickname === message.sender.nickname && config.themeColor === '#1d77ff' ? '#fff' : '')
-          }"
+        <img
+          v-if="message.url && checkType(message.url.toString())"
+          class="file-img"
+          v-bind:src="message.url"
+        />
+
+        <img
+          v-if="message.url && !checkType(message.url.toString())"
+          class="file-file"
+          src="@/assets/file.png"
+        />
+        <a
+          v-if="message.url && !checkType(message.url.toString())"
+          class="file-filename"
+          :href="message.url"
         >
+          {{ message.url }}
+        </a>
 
-          <p v-if="message.sender.userId !== userId" class="nickname">
-            {{ message.sender.nickname }}
-          </p>
-
-          <div style="white-space: pre-wrap">{{ message.message }}</div>
-
-          <img
-            v-if="message.url && checkType(message.url.toString())"
-            class="file-img"
-            v-bind:src="message.url"
-          />
-
-          <img
-            v-if="message.url && !checkType(message.url.toString())"
-            class="file-file"
-            src="@/assets/file.png"
-          />
-          <a
-            v-if="message.url && !checkType(message.url.toString())"
-            class="file-filename"
-            :href="message.url"
-          >
-            {{ message.url }}
-          </a>
-
-          <time>{{ convertDate(message.createdAt) }}</time>
-        </div>
+        <time>{{ convertDate(message.createdAt) }}</time>
       </div>
+
       <infinite-loading
         v-if="sortDirection === 'top'"
         direction="bottom"
@@ -71,21 +75,21 @@
   어떻게 줄것? 
 -->
 <script>
-import { format } from "date-fns";
-import InfiniteLoading from "vue-infinite-loading";
-import { SendbirdAction } from "@/sendbird/SendbirdAction";
+import { format } from 'date-fns';
+import InfiniteLoading from 'vue-infinite-loading';
+import { SendbirdAction } from '@/sendbird/SendbirdAction';
 
 export default {
   components: {
     InfiniteLoading,
   },
 
-  name: "MessageLog",
+  name: 'MessageLog',
 
   props: {
     sortDirection: {
       type: String,
-      default: "top",
+      default: 'top',
     },
     classValue: {
       type: Boolean,
@@ -93,42 +97,40 @@ export default {
     },
     userId: {
       type: String,
-      default: "admin",
+      default: 'admin',
     },
     nickname: {
       type: String,
-      default: "nickname",
+      default: 'nickname',
     },
   },
- 
- 
+
   inject: {
-      config: {
-          themeColor: '#1d77ff'
-      }, 
-      msg: "msg"
+    config: {
+      themeColor: '#1d77ff',
+    },
+    msg: 'msg',
   },
-  
 
   data() {
     return {
+      isReverse: false,
       messages: [],
-      loadMessage: 15,
+      loadMessage: 30,
       timestamp: 0,
     };
   },
 
-
   methods: {
     convertDate(date) {
-      return format(date, "yyyy-MM-dd HH:mm");
+      return format(date, 'yyyy-MM-dd HH:mm');
     },
 
     checkType(fileUrl) {
       if (
-        fileUrl.includes("jpeg") ||
-        fileUrl.includes("png") ||
-        fileUrl.includes("jpg")
+        fileUrl.includes('jpeg') ||
+        fileUrl.includes('png') ||
+        fileUrl.includes('jpg')
       ) {
         return true;
       } else {
@@ -138,18 +140,26 @@ export default {
 
     infiniteHandler($state) {
       const sendbirdAction = SendbirdAction.getInstance();
-
+      const direction = this.sortDirection === 'top' ? true : false;
+      console.log(direction);
       setTimeout(() => {
         sendbirdAction
-          .getMessageList(this.loadMessage)
+          .getMessageList(this.loadMessage, direction)
           .then((res) => {
-            this.loadMessage += 20;
+            if (direction) {
+              this.msg.push(...res);
+            } else if (!direction) {
+              this.msg.unshift(...res);
+            }
+            // this.loadMessage += 20;
             //const newItemList = this.messages.push(...res);
-            this.msg.push(...res);
+            // this.msg.unshift(...res);
 
-            $state.loaded();
+            $state.loading();
           })
-          .catch(() => $state.complete());
+          .catch(() => {
+            $state.complete();
+          });
       }, 1000);
     },
   },
@@ -186,6 +196,7 @@ export default {
   margin-bottom: 20px;
   border-radius: 15px;
   list-style-type: none;
+  word-break: break-all;
 }
 
 .chat-item .nickname {

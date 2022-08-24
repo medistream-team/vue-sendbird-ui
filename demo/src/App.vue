@@ -3,27 +3,28 @@
     <div class="about">
       <h1>Vue Sendbird UI</h1>
       <p>
-        <a href="https://sendbird.com/">Sendbird</a> 기반 채팅 UI 컴포넌트 입니다.<br>
+        <a href="https://sendbird.com/">Sendbird</a> 기반 채팅 UI 컴포넌트
+        입니다.<br />
         Vue 2 버전에 최적화 되어있습니다.
       </p>
-      <p>
-        아래 버튼을 눌러 기능을 테스트 해보세요!
-      </p>
+      <p>아래 버튼을 눌러 기능을 테스트 해보세요!</p>
 
-      <hr>
+      <hr />
 
       <h2>메시지 방향 정하기</h2>
       <div class="controls">
         <button
           type="button"
-          :class="{active: sortDirection === 'top'}"
-          @click="sortDirection = 'top'">
+          :class="{ active: sortDirection === 'top' }"
+          @click="sortDirection = 'top'"
+        >
           <i class="ii ii-check"></i> 위로 정렬하기
         </button>
         <button
           type="button"
-          :class="{active: sortDirection === 'bottom'}"
-          @click="sortDirection = 'bottom'">
+          :class="{ active: sortDirection === 'bottom' }"
+          @click="sortDirection = 'bottom'"
+        >
           <i class="ii ii-check"></i>
           아래로 정렬하기
         </button>
@@ -33,15 +34,23 @@
       <div class="controls">
         <button
           type="button"
-          :class="{active: userId === users[0].id}"
-          @click="userId = users[0].id; nickname = users[0].nickname;">
+          :class="{ active: userId === users[0].id }"
+          @click="
+            userId = users[0].id;
+            nickname = users[0].nickname;
+          "
+        >
           <i class="ii ii-check"></i>
           User 1
         </button>
         <button
           type="button"
-          :class="{active: userId === users[1].id}"
-          @click="userId = users[1].id; nickname = users[1].nickname;">
+          :class="{ active: userId === users[1].id }"
+          @click="
+            userId = users[1].id;
+            nickname = users[1].nickname;
+          "
+        >
           <i class="ii ii-check"></i>
           User 2
         </button>
@@ -51,15 +60,17 @@
       <div class="controls">
         <button
           type="button"
-          :class="{active: channel === sendbirdChannels[0]}"
-          @click="channel = sendbirdChannels[0]">
+          :class="{ active: channel === sendbirdChannels[0] }"
+          @click="channel = sendbirdChannels[0]"
+        >
           <i class="ii ii-check"></i>
           Channel 1
         </button>
         <button
           type="button"
-          :class="{active: channel === sendbirdChannels[1]}"
-          @click="channel = sendbirdChannels[1]">
+          :class="{ active: channel === sendbirdChannels[1] }"
+          @click="channel = sendbirdChannels[1]"
+        >
           <i class="ii ii-check"></i>
           Channel 2
         </button>
@@ -69,15 +80,17 @@
       <div class="controls">
         <button
           type="button"
-          :class="{active: themeColor === colorPalette[0]}"
-          @click="themeColor = colorPalette[0]">
+          :class="{ active: themeColor === colorPalette[0] }"
+          @click="themeColor = colorPalette[0]"
+        >
           <i class="ii ii-check"></i>
           노랑
         </button>
         <button
           type="button"
-          :class="{active: themeColor === colorPalette[1]}"
-          @click="themeColor = colorPalette[1]">
+          :class="{ active: themeColor === colorPalette[1] }"
+          @click="themeColor = colorPalette[1]"
+        >
           <i class="ii ii-check"></i>
           파랑
         </button>
@@ -93,19 +106,17 @@
       :theme-color="themeColor"
       :sort-direction="sortDirection"
     ></message-widget>
-
   </div>
 </template>
 
 <script>
-import MessageWidget from "./components/MessageWidget.vue";
+import MessageWidget from './components/MessageWidget.vue';
 //import { SendbirdAction } from "@/sendbird/SendbirdAction";
 
-
 export default {
-  name: "App",
+  name: 'App',
   components: {
-    MessageWidget ,
+    MessageWidget,
   },
   props: {
     users: {
@@ -114,33 +125,33 @@ export default {
         return [
           {
             id: 'user1Id',
-            nickname: 'user1'
+            nickname: 'user1',
           },
           {
             id: 'user2Id',
-            nickname: 'user2'
-          }
-        ]
-      }
+            nickname: 'user2',
+          },
+        ];
+      },
     },
     sendbirdChannels: {
       type: Array,
       default: () => {
         return [
           'sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed',
-          'sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c'
-        ]
-      }
+          'sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c',
+        ];
+      },
     },
     colorPalette: {
       type: Array,
       default: () => {
         return [
           '#fef01b', // 노랑색
-          '#1d77ff' // 파랑색
-        ]
-      }
-    }
+          '#1d77ff', // 파랑색
+        ];
+      },
+    },
   },
   data() {
     return {
@@ -149,30 +160,29 @@ export default {
       channel: this.sendbirdChannels[0],
       themeColor: this.colorPalette[0],
       sortDirection: 'top', // top, bottom
-      widgetStatus: true
+      widgetStatus: true,
     };
   },
   watch: {
     userId() {
-      this.widgetStatus = false
+      this.widgetStatus = false;
       setTimeout(() => {
-        this.widgetStatus = true
-      }, 1)
+        this.widgetStatus = true;
+      }, 1);
     },
     channel() {
-      this.widgetStatus = false
+      this.widgetStatus = false;
       setTimeout(() => {
-        this.widgetStatus = true
-      }, 1)
+        this.widgetStatus = true;
+      }, 1);
     },
     sortDirection() {
-      this.widgetStatus = false
+      this.widgetStatus = false;
       setTimeout(() => {
-        this.widgetStatus = true
-      }, 1)
-    }
-  }
-
+        this.widgetStatus = true;
+      }, 1);
+    },
+  },
 };
 </script>
 

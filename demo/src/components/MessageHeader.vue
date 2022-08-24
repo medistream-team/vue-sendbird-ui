@@ -1,8 +1,6 @@
 <template>
   <div class="message-header">
-    <div
-      v-if="!searchVisible"
-      class="bar">
+    <div v-if="!searchVisible" class="bar">
       <p class="title">{{ userId }}</p>
       <div class="tools left">
         <!-- <button type="button" title="뒤로가기">
@@ -16,14 +14,13 @@
       </div>
     </div>
     <!-- 검색 -->
-    <div
-      v-if="searchVisible"
-      class="tool-search">
+    <div v-if="searchVisible" class="tool-search">
       <input
         ref="search"
         type="search"
         v-model="searchKeyword"
-        placeholder="메시지 내용 검색">
+        placeholder="메시지 내용 검색"
+      />
       <button type="button" @click="searchVisible = false">
         <i class="ii ii-remove"></i>
       </button>
@@ -32,13 +29,13 @@
 </template>
 
 <script>
-import "inticons/fonts/inticons.bundle.min.css";
+import 'inticons/fonts/inticons.bundle.min.css';
 
 export default {
   props: {
     userId: {
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
@@ -86,20 +83,20 @@ export default {
   right: 15px;
   left: 15px;
 }
-.tool-search input[type=text]::-ms-clear {
-  display: none;
-  width : 0;
-  height: 0;
-}
-.tool-search input[type=text]::-ms-reveal {
+.tool-search input[type='text']::-ms-clear {
   display: none;
   width: 0;
   height: 0;
 }
-.tool-search input[type="search"]::-webkit-search-decoration,
-.tool-search input[type="search"]::-webkit-search-cancel-button,
-.tool-search input[type="search"]::-webkit-search-results-button,
-.tool-search input[type="search"]::-webkit-search-results-decoration {
+.tool-search input[type='text']::-ms-reveal {
+  display: none;
+  width: 0;
+  height: 0;
+}
+.tool-search input[type='search']::-webkit-search-decoration,
+.tool-search input[type='search']::-webkit-search-cancel-button,
+.tool-search input[type='search']::-webkit-search-results-button,
+.tool-search input[type='search']::-webkit-search-results-decoration {
   display: none;
 }
 .tool-search input {
