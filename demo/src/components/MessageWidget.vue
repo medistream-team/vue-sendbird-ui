@@ -28,14 +28,14 @@
 </template>
 
 <script>
-import MessageInput from '@/components/MessageInput';
-import MessageLog from '@/components/MessageLog';
-import MessageHeader from './MessageHeader.vue';
-import { SendbirdAction } from '@/sendbird/SendbirdAction';
-import { computed } from 'vue';
+import MessageInput from "@/components/MessageInput";
+import MessageLog from "@/components/MessageLog";
+import MessageHeader from "./MessageHeader.vue";
+import { SendbirdAction } from "@/sendbird/SendbirdAction";
+import { computed } from "vue";
 
 export default {
-  name: 'MessageWidget',
+  name: "MessageWidget",
   components: {
     MessageInput,
     MessageLog,
@@ -45,38 +45,31 @@ export default {
   props: {
     themeColor: {
       type: String,
-      default: '#1d77ff',
+      default: "#1d77ff",
     },
     sortDirection: {
       type: String,
-      default: 'top',
+      default: "top",
     },
     userId: {
       type: String,
       //default: "admin",
     },
 
-    nickname: {
-      type: String,
-      //default: "user1",
-    },
+    nickname: { type: String },
 
-    channel: {
-      type: String,
-      //default:
-      //  "sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed",
-    },
+    channel: { type: String },
   },
 
   data() {
     return {
       showInfiniteLoadingIndicator: false,
-      scrollElement: document.querySelector('.chat-container'),
+      scrollElement: document.querySelector(".chat-container"),
       classValue: true,
-      channel1:
-        'sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed',
-      channel2:
-        'sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c',
+      // channel1:
+      //   'sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed',
+      // channel2:
+      //   'sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c',
       loadMessage: 20,
 
       messages: [],
@@ -89,11 +82,11 @@ export default {
 
   provide() {
     const config = {};
-    Object.defineProperty(config, 'themeColor', {
+    Object.defineProperty(config, "themeColor", {
       enumerable: true,
       get: () => this.themeColor,
     });
-    Object.defineProperty(config, 'sortDirection', {
+    Object.defineProperty(config, "sortDirection", {
       enumerable: true,
       get: () => this.sortDirection,
     });
@@ -109,7 +102,7 @@ export default {
   watch: {
     sortDirection: {
       handler: function (value) {
-        if (value === 'top') {
+        if (value === "top") {
           this.messages.reverse();
         } else {
           this.messages.reverse();
@@ -119,7 +112,7 @@ export default {
     nickname: {
       handler: function (value) {
         const sendbirdAction = SendbirdAction.getInstance();
-        if (value !== 'nickname') {
+        if (value !== "nickname") {
           sendbirdAction.init(this.userId, this.nickname, this.channel);
         } else {
           sendbirdAction.init(this.userId, this.nickname, this.channel);
@@ -146,9 +139,9 @@ export default {
 
   methods: {
     addInputMessage: function (message) {
-      if (this.sortDirection === 'top') {
+      if (this.sortDirection === "top") {
         this.messages.unshift(message);
-      } else if (this.sortDirection === 'bottom') {
+      } else if (this.sortDirection === "bottom") {
         this.messages.push(message);
       }
     },
@@ -194,7 +187,7 @@ export default {
   */
 
   async created() {
-    console.log('messagewidget vue start');
+    console.log("messagewidget vue start");
     const sendbirdAction = SendbirdAction.getInstance();
     const error = await sendbirdAction.init(
       this.userId,
@@ -202,16 +195,16 @@ export default {
       //"sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
       this.channel
     );
-    const direction = this.sortDirection === 'top' ? true : false;
-    sendbirdAction.search('f').then((response) => {
-      console.log('re : ', response);
+    const direction = this.sortDirection === "top" ? true : false;
+    sendbirdAction.search("f").then((response) => {
+      console.log("re : ", response);
     });
     if (!error) {
       sendbirdAction
         .getMessageList(this.loadMessage, direction)
         .then((response) => {
           this.messages = response;
-          console.log('first messages : ', this.messages);
+          console.log("first messages : ", this.messages);
           if (this.messages.length > 0) {
             this.showInfiniteLoadingIndicator = true;
           }

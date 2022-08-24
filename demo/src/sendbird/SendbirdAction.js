@@ -1,14 +1,14 @@
-import SendBird from 'sendbird';
+import SendBird from "sendbird";
 
 let instance = null;
 
 class SendbirdAction {
   constructor() {
-    console.log('new sendbirdAction');
+    console.log("new sendbirdAction");
     if (instance) {
       return instance;
     }
-    this.sb = new SendBird({ appId: '10A7853D-BD45-4355-8BB7-30711F09A48B' });
+    this.sb = new SendBird({ appId: "10A7853D-BD45-4355-8BB7-30711F09A48B" });
     this.channel = null;
     this.previousMessageQuery = null;
     this.searchMessageQueryparams = null;
@@ -20,7 +20,7 @@ class SendbirdAction {
   //"sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed"
   //"sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
   async init(userId, nickname, channel) {
-    console.log('init');
+    console.log("init");
     let error = null;
     try {
       this.user = await this.connect(userId, nickname);
@@ -39,7 +39,7 @@ class SendbirdAction {
   create() {
     const params = new this.sb.GroupChannelParams();
     params.isPublic = true;
-    params.name = 'test-public-channel-2';
+    params.name = "test-public-channel-2";
 
     return new Promise((resolve, reject) => {
       this.sb.GroupChannel.createChannel(params, (user, error) => {
@@ -111,7 +111,7 @@ class SendbirdAction {
 
   getMessageList(loadMessage, direction) {
     return new Promise((resolve, reject) => {
-      console.log('pre params : ', this.previousMessageQuery);
+      console.log("pre params : ", this.previousMessageQuery);
       if (
         this.previousMessageQuery.hasMore &&
         !this.previousMessageQuery.isLoading
@@ -120,7 +120,7 @@ class SendbirdAction {
           loadMessage,
           direction,
           function (messageArray) {
-            console.log('load test :', messageArray);
+            console.log("load test :", messageArray);
             if (messageArray !== null) {
               resolve(messageArray);
             } else {
@@ -156,10 +156,10 @@ class SendbirdAction {
     return new Promise((resolve, reject) => {
       if (keyword != null) {
         this.searchMessageQueryparams = this.sb.createMessageSearchQuery();
-        console.log('search: ', this.searchMessageQueryparams);
+        console.log("search: ", this.searchMessageQueryparams);
         // this.searchMessageQueryparams.channelUrl = this.channel;
         this.searchMessageQueryparams.keyword = keyword;
-        console.log('vv : ', keyword);
+        console.log("vv : ", keyword);
 
         resolve(this.searchMessageQueryparams.next());
       }
