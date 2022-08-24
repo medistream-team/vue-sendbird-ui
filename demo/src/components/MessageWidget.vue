@@ -194,8 +194,12 @@ export default {
       this.userId,
       this.nickname,
       //"sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c"
-      this.channel
+      this.channel,
     );
+
+    sendbirdAction.search('f').then((response) => {
+      console.log('ww : ', response);
+    });
 
     if (!error) {
       sendbirdAction.getMessageList(this.loadMessage).then((response) => {

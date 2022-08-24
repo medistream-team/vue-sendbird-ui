@@ -10,6 +10,7 @@ class SendbirdAction {
     this.sb = new SendBird({ appId: "10A7853D-BD45-4355-8BB7-30711F09A48B" });
     this.channel = null;
     this.previousMessageQuery = null;
+    this.searchMessageQueryparams = null;
 
     instance = this;
   }
@@ -23,6 +24,7 @@ class SendbirdAction {
       this.channel = await this.getChannel(channel);
       await this.join();
       this.previousMessageQuery = this.channel.createPreviousMessageListQuery();
+      // console.log(channel);
 
       this.previousMessageQuery.reverse = true;
     } catch (e) {
@@ -117,7 +119,6 @@ class SendbirdAction {
         //     error ? reject(error) : resolve(response);
         //   }
         // );
-
         const params = new this.sb.MessageListParams();
         params.prevResultSize = loadMessage;
         params.reverse = true;
@@ -132,6 +133,21 @@ class SendbirdAction {
       } else {
         resolve([]);
       }
+    });
+  }
+
+  search(keyword) {
+    return new Promise((resolve, reject) => {
+      if (keyword != null) {
+        this.searchMessageQueryparams = this.sb.createMessageSearchQuery();
+        console.log("search: ", this.searchMessageQueryparams);
+        this.searchMessageQueryparams.keyword = keyword;
+        console.log("searchText : ", keyword);
+        // this.searchMessageQueryparams.channelUrl = this.channel.url;
+        resolve(this.searchMessageQueryparams.next());
+      }
+
+      reject();
     });
   }
 
