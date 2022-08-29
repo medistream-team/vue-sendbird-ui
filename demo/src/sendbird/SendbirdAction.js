@@ -4,12 +4,16 @@ let instance = null;
 
 class SendbirdAction {
   constructor() {
+    console.log("new sendbirdAction");
     if (instance) {
       return instance;
     }
-    this.sb = new SendBird({ appId: "10A7853D-BD45-4355-8BB7-30711F09A48B" });
+    this.sb = new SendBird({ appId: process.env.VUE_APP_SENDBIRD_ID });
     this.channel = null;
     this.previousMessageQuery = null;
+    this.searchMessageQueryparams = null;
+    this.params = null;
+    this.user = null;
 
     instance = this;
   }
@@ -19,12 +23,14 @@ class SendbirdAction {
     console.log("init");
     let error = null;
     try {
-      await this.connect(userId, nickname, channel);
+      this.user = await this.connect(userId, nickname);
       this.channel = await this.getChannel(channel);
       await this.join();
+      this.params = new this.sb.MessageListParams();
       this.previousMessageQuery = this.channel.createPreviousMessageListQuery();
 
-      this.previousMessageQuery.reverse = true;
+      // this.searchMessagyQuery = new this.sb.searchMessagyQuery();
+      // console.log('params:', this.searchMessagyQuery);
     } catch (e) {
       error = e;
     }
@@ -103,12 +109,25 @@ class SendbirdAction {
     });
   }
 
-  getMessageList(loadMessage) {
+  getMessageList(loadMessage, direction) {
     return new Promise((resolve, reject) => {
+      console.log("pre params : ", this.previousMessageQuery);
       if (
         this.previousMessageQuery.hasMore &&
         !this.previousMessageQuery.isLoading
       ) {
+        this.previousMessageQuery.load(
+          loadMessage,
+          direction,
+          function (messageArray) {
+            console.log("load test :", messageArray);
+            if (messageArray !== null) {
+              resolve(messageArray);
+            } else {
+              reject();
+            }
+          }
+        );
         // this.previousMessageQuery.load(
         //   loadMessage,
         //   true,
@@ -118,23 +137,36 @@ class SendbirdAction {
         //   }
         // );
 
-        const params = new this.sb.MessageListParams();
-        params.prevResultSize = loadMessage;
-        params.reverse = true;
-        this.channel.getMessagesByTimestamp(
-          Date.now(),
-          params,
-          (messages, error) => {
-            const response = messages;
-            error ? reject(error) : resolve(response);
-          }
-        );
+        // this.channel.getMessagesByTimestamp(
+        //   Date.now(),
+        //   this.params,
+        //   (messages, error) => {
+        //     const response = messages;
+        //     this.params = new this.sb.MessageListParams();
+        //     error ? reject(error) : resolve(response);
+        //   }
+        // );
       } else {
         resolve([]);
       }
     });
   }
 
+  search(keyword) {
+    return new Promise((resolve, reject) => {
+      if (keyword != null) {
+        this.searchMessageQueryparams = this.sb.createMessageSearchQuery();
+        console.log("search: ", this.searchMessageQueryparams);
+        // this.searchMessageQueryparams.channelUrl = this.channel;
+        this.searchMessageQueryparams.keyword = keyword;
+        console.log("vv : ", keyword);
+
+        resolve(this.searchMessageQueryparams.next());
+      }
+
+      reject();
+    });
+  }
   static getInstance() {
     return new SendbirdAction();
   }
