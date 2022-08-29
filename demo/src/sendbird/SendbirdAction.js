@@ -143,7 +143,6 @@ class SendbirdAction {
         console.log("search: ", this.searchMessageQueryparams);
         this.searchMessageQueryparams.keyword = keyword;
         console.log("searchText : ", keyword);
-        // this.searchMessageQueryparams.channelUrl = this.channel.url;
         resolve(this.searchMessageQueryparams.next());
       }
 

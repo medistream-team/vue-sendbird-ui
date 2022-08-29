@@ -4,7 +4,7 @@
     'sort-bottom': sortDirection === 'bottom',
   }">
 
-    <message-header :user-id="userId"></message-header>
+    <message-header :user-id="userId" :messages="messages"></message-header>
 
     <message-input
       @addInputMessage="addInputMessage"
@@ -197,9 +197,9 @@ export default {
       this.channel,
     );
 
-    sendbirdAction.search('f').then((response) => {
-      console.log('ww : ', response);
-    });
+    // sendbirdAction.search('f').then((response) => {
+    //   console.log('ww : ', response);
+    // });
 
     if (!error) {
       sendbirdAction.getMessageList(this.loadMessage).then((response) => {

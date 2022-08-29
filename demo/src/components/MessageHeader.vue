@@ -23,8 +23,9 @@
         ref="search"
         type="search"
         v-model="searchKeyword"
+        v-on:keyup.enter="search()"
         placeholder="메시지 내용 검색">
-      <button type="button" @click="searchVisible = false">
+      <button type="button" @click="search()">
         <i class="ii ii-remove"></i>
       </button>
     </div>
@@ -38,6 +39,12 @@ export default {
   props: {
     userId: {
       type: String
+    },
+    sendbirdChannels:{
+      type:String
+    },
+    messages:{
+      type:String
     }
   },
   data() {
@@ -46,6 +53,22 @@ export default {
       searchVisible: false,
     };
   },
+   methods: {
+    search(e){
+      console.log( this.messages.map((el) => el.message))
+      const messageText = this.messages;
+      for(let i = 0; i < messageText.length; i++) {
+        console.log(messageText[i].message)
+        if(messageText[i].message === this.searchKeyword){
+          alert('있습니다')
+          e.preventDefault();
+        } else {
+          alert('검색 결과가 없습니다')
+          e.preventDefault();
+        }
+      }
+    }
+  }
 };
 </script>
 
