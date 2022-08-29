@@ -8,7 +8,7 @@ class SendbirdAction {
     if (instance) {
       return instance;
     }
-    this.sb = new SendBird({ appId: "10A7853D-BD45-4355-8BB7-30711F09A48B" });
+    this.sb = new SendBird({ appId: process.env.VUE_APP_SENDBIRD_ID });
     this.channel = null;
     this.previousMessageQuery = null;
     this.searchMessageQueryparams = null;

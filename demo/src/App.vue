@@ -124,8 +124,8 @@ export default {
       default: () => {
         return [
           {
-            id: 'user1Id',
-            nickname: 'user1',
+            id: 'user3Id',
+            nickname: 'user3'
           },
           {
             id: 'user2Id',
@@ -138,10 +138,10 @@ export default {
       type: Array,
       default: () => {
         return [
-          'sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed',
-          'sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c',
-        ];
-      },
+          process.env.VUE_APP_CHANNEL_1_ID,
+          process.env.VUE_APP_CHANNEL_2_ID
+        ]
+      }
     },
     colorPalette: {
       type: Array,

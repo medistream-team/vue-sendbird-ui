@@ -66,10 +66,8 @@ export default {
       showInfiniteLoadingIndicator: false,
       scrollElement: document.querySelector(".chat-container"),
       classValue: true,
-      // channel1:
-      //   'sendbird_group_channel_79112783_af5d5b502f8b4defe3303a2c75705cd6068d87ed',
-      // channel2:
-      //   'sendbird_group_channel_79129877_dd9423fd98ccc7580dd06677341d4dff6c70862c',
+      channel1: process.env.VUE_APP_CHANNEL_1_ID,
+      channel2: process.env.VUE_APP_CHANNEL_2_ID,
       loadMessage: 20,
 
       messages: [],
